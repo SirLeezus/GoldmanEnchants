@@ -23,7 +23,7 @@ public class EnchantListener implements Listener {
     public void onEnchantItem(EnchantItemEvent e) {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
 
-        if (plugin.getPU().enchantChanceRNG() > 0) {
+        if (plugin.getPU().enchantChanceRNG() > 300) {
             Player player = e.getEnchanter();
             Location blockLocation = e.getEnchantBlock().getLocation();
             int level = e.getExpLevelCost();
@@ -33,7 +33,6 @@ public class EnchantListener implements Listener {
             if (itemMeta != null) {
                 if (level == 30) {
                     int rng = plugin.getPU().enchantChoiceRNG();
-                    System.out.println(rng);
 
                     switch (rng) {
 
