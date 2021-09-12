@@ -7,6 +7,7 @@ import lee.code.enchants.lists.Enchants;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -67,54 +68,56 @@ public class AnvilListener implements Listener {
             ItemMeta secondItemMeta = secondSlot.getItemMeta();
             CustomEnchants customEnchants = plugin.getCustomEnchants();
 
-            ItemStack dupe = firstSlot.clone();
-            ItemMeta dupeMeta = dupe.getItemMeta();
+            if (EnchantmentTarget.TOOL.includes(secondSlot.getType()) || EnchantmentTarget.WEAPON.includes(secondSlot.getType()) || secondSlot.getType().equals(Material.ENCHANTED_BOOK)) {
+                ItemStack dupe = firstSlot.clone();
+                ItemMeta dupeMeta = dupe.getItemMeta();
 
-            Map<Enchantment, Integer> enchants = secondItemMeta instanceof EnchantmentStorageMeta bookSlot2 ? bookSlot2.getStoredEnchants() : secondItemMeta.getEnchants();
+                Map<Enchantment, Integer> enchants = secondItemMeta instanceof EnchantmentStorageMeta bookSlot2 ? bookSlot2.getStoredEnchants() : secondItemMeta.getEnchants();
 
-            for (Map.Entry<Enchantment, Integer> slotTwoEnchantMap : enchants.entrySet()) {
-                Enchantment enchant2 = slotTwoEnchantMap.getKey();
-                int level2 = slotTwoEnchantMap.getValue();
-                boolean enchantItem = true;
+                for (Map.Entry<Enchantment, Integer> slotTwoEnchantMap : enchants.entrySet()) {
+                    Enchantment enchant2 = slotTwoEnchantMap.getKey();
+                    int level2 = slotTwoEnchantMap.getValue();
+                    boolean enchantItem = true;
 
-                if (enchant2.canEnchantItem(firstSlot) || firstSlot.getType().equals(Material.ENCHANTED_BOOK)) {
-                    if (firstItemMeta instanceof EnchantmentStorageMeta bookSlot1) {
-                        if (bookSlot1.hasStoredEnchant(enchant2)) {
-                            int level1 = bookSlot1.getStoredEnchantLevel(enchant2);
-                            if (level1 > level2) level2 = level1;
-                            else if (level1 == level2) level2 = level1 + 1;
+                    if (enchant2.canEnchantItem(firstSlot) || firstSlot.getType().equals(Material.ENCHANTED_BOOK)) {
+                        if (firstItemMeta instanceof EnchantmentStorageMeta bookSlot1) {
+                            if (bookSlot1.hasStoredEnchant(enchant2)) {
+                                int level1 = bookSlot1.getStoredEnchantLevel(enchant2);
+                                if (level1 > level2) level2 = level1;
+                                else if (level1 == level2) level2 = level1 + 1;
+                            }
+                        } else {
+                            if (firstItemMeta.hasEnchant(enchant2)) {
+                                int level1 = firstItemMeta.getEnchantLevel(enchant2);
+                                if (level1 > level2) level2 = level1;
+                                else if (level1 == level2) level2 = level1 + 1;
+                            }
                         }
-                    } else {
-                        if (firstItemMeta.hasEnchant(enchant2)) {
-                            int level1 = firstItemMeta.getEnchantLevel(enchant2);
-                            if (level1 > level2) level2 = level1;
-                            else if (level1 == level2) level2 = level1 + 1;
-                        }
-                    }
-                } else enchantItem = false;
+                    } else enchantItem = false;
 
-                if (enchantItem) {
-                    if (enchant2.getMaxLevel() < level2) level2 = enchant2.getMaxLevel();
-                    if (dupeMeta instanceof EnchantmentStorageMeta dupeBook) dupeBook.addStoredEnchant(enchant2, level2, false);
-                    else dupeMeta.addEnchant(enchant2, level2, false);
-                    dupe.setItemMeta(dupeMeta);
-                }
-            }
-
-            for (Map.Entry<Enchantment, Integer> slotTwoEnchantMap : secondItemMeta.getEnchants().entrySet()) {
-                String key = slotTwoEnchantMap.getKey().getKey().getKey().toUpperCase();
-                if (pu.getEnchantKeys().contains(key)) {
-                    if (customEnchants.valueOf(key).canEnchantItem(firstSlot)) {
-                        if (!firstItemMeta.hasEnchant(customEnchants.valueOf(key))) {
-                            dupe.setItemMeta(pu.applyCustomEnchant(dupeMeta, customEnchants.valueOf(key), 0));
-                        }
+                    if (enchantItem) {
+                        if (enchant2.getMaxLevel() < level2) level2 = enchant2.getMaxLevel();
+                        if (dupeMeta instanceof EnchantmentStorageMeta dupeBook) dupeBook.addStoredEnchant(enchant2, level2, false);
+                        else dupeMeta.addEnchant(enchant2, level2, false);
+                        dupe.setItemMeta(dupeMeta);
                     }
                 }
+
+                for (Map.Entry<Enchantment, Integer> slotTwoEnchantMap : secondItemMeta.getEnchants().entrySet()) {
+                    String key = slotTwoEnchantMap.getKey().getKey().getKey().toUpperCase();
+                    if (pu.getEnchantKeys().contains(key)) {
+                        if (customEnchants.valueOf(key).canEnchantItem(firstSlot)) {
+                            if (!firstItemMeta.hasEnchant(customEnchants.valueOf(key))) {
+                                dupe.setItemMeta(pu.applyCustomEnchant(dupeMeta, customEnchants.valueOf(key), 0));
+                            }
+                        }
+                    }
+                }
+                if (!dupe.equals(firstSlot)) {
+                    e.setResult(dupe);
+                    if (e.getInventory().getRepairCost() == 0) plugin.getServer().getScheduler().runTask(plugin, () -> e.getInventory().setRepairCost(3));
+                } else e.setResult(null);
             }
-            if (!dupe.equals(firstSlot)) {
-                e.setResult(dupe);
-                if (e.getInventory().getRepairCost() == 0) plugin.getServer().getScheduler().runTask(plugin, () -> e.getInventory().setRepairCost(3));
-            } else e.setResult(null);
         }
     }
 }
