@@ -19,7 +19,7 @@ public class EnchantListener implements Listener {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
         PU pu = plugin.getPU();
 
-        if (pu.enchantChanceRNG() > 300) {
+        if (pu.enchantChanceRNG() > 500) {
             Player player = e.getEnchanter();
             Location blockLocation = e.getEnchantBlock().getLocation();
             int level = e.getExpLevelCost();

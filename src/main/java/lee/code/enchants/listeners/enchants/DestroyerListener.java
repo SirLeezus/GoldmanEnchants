@@ -35,7 +35,7 @@ public class DestroyerListener implements Listener {
             blocks.remove(block);
             for (Block sBlock : blocks) {
                 Material type = sBlock.getType();
-                if (!type.equals(Material.BEDROCK) && !type.equals(Material.AIR) && !type.equals(Material.WATER) && !type.equals(Material.LAVA) && !(block.getState() instanceof Container)) {
+                if (!type.equals(Material.BEDROCK) && !type.equals(Material.AIR) && !type.equals(Material.WATER) && !type.equals(Material.LAVA) && !type.name().contains("SIGN") && !(block.getState() instanceof Container)) {
                     if (!sBlock.getDrops().isEmpty()) {
                         if (itemMeta.hasEnchant(Enchantment.SILK_TOUCH)) {
                             player.getWorld().dropItemNaturally(sBlock.getLocation(), new ItemStack(sBlock.getType()));
