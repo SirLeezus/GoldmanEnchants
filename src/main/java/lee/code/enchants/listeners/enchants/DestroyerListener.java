@@ -34,25 +34,30 @@ public class DestroyerListener implements Listener {
             List<Block> blocks = getBlocks(player.getUniqueId(), block.getRelative(getDirection(player)));
             blocks.remove(block);
             for (Block sBlock : blocks) {
-                if (itemMeta.hasEnchant(Enchantment.SILK_TOUCH)) {
-                    player.getWorld().dropItemNaturally(sBlock.getLocation(), new ItemStack(sBlock.getType()));
-                    sBlock.setType(Material.AIR);
-                } else if (itemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
-                    if (sBlock.getType().name().contains("ORE") || sBlock.getType().name().contains("CLUSTER")) {
-                        if (plugin.getPU().enchantDestroyerLootingRNG() > 10) {
-                            List<ItemStack> drops = new ArrayList<>(sBlock.getDrops());
-                            ItemStack item = drops.get(0);
-                            if (item.getType() != Material.AIR) {
-                                item.setAmount(itemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS) * item.getAmount());
-                                drops.set(0, item);
-                            }
-                            for (ItemStack drop : drops) {
-                                sBlock.setType(Material.AIR);
-                                player.getWorld().dropItemNaturally(sBlock.getLocation(), drop);
-                            }
+                Material type = sBlock.getType();
+                if (!type.equals(Material.BEDROCK) && !type.equals(Material.AIR) && !type.equals(Material.WATER) && !type.equals(Material.LAVA) && !(block.getState() instanceof Container)) {
+                    if (!sBlock.getDrops().isEmpty()) {
+                        if (itemMeta.hasEnchant(Enchantment.SILK_TOUCH)) {
+                            player.getWorld().dropItemNaturally(sBlock.getLocation(), new ItemStack(sBlock.getType()));
+                            sBlock.setType(Material.AIR);
+                        } else if (itemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
+                            if (sBlock.getType().name().contains("ORE") || sBlock.getType().name().contains("CLUSTER")) {
+                                if (plugin.getPU().enchantDestroyerLootingRNG() > 10) {
+                                    List<ItemStack> drops = new ArrayList<>(sBlock.getDrops());
+                                    ItemStack item = drops.get(0);
+                                    if (item.getType() != Material.AIR) {
+                                        item.setAmount(itemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS) * item.getAmount());
+                                        drops.set(0, item);
+                                    }
+                                    for (ItemStack drop : drops) {
+                                        sBlock.setType(Material.AIR);
+                                        player.getWorld().dropItemNaturally(sBlock.getLocation(), drop);
+                                    }
+                                } else sBlock.breakNaturally();
+                            } else sBlock.breakNaturally();
                         } else sBlock.breakNaturally();
                     } else sBlock.breakNaturally();
-                } else sBlock.breakNaturally();
+                }
             }
         }
     }
@@ -69,12 +74,9 @@ public class DestroyerListener implements Listener {
 
                     Location loc = new Location(start.getWorld(), x, y, z);
                     Block block = loc.getBlock();
-                    Material type = block.getType();
-                    if (!type.equals(Material.BEDROCK) && !type.equals(Material.AIR) && !type.equals(Material.WATER) && !type.equals(Material.LAVA) && !(block.getState() instanceof Container)) {
-                        Chunk chunk = block.getChunk();
-                        if (chunkAPI.canBreakInChunk(uuid, chunk)) {
-                            blocks.add(block);
-                        }
+                    Chunk chunk = block.getChunk();
+                    if (chunkAPI.canBreakInChunk(uuid, chunk)) {
+                        if (!blocks.contains(block)) blocks.add(block);
                     }
                 }
             }

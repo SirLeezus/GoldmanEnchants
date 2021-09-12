@@ -48,10 +48,11 @@ public class LoggerListener implements Listener {
                                 log.getWorld().playSound(log.getLocation(), Sound.BLOCK_WOOD_BREAK, 1, 1);
 
                                 for (BlockFace face : BlockFace.values()) {
-                                    if (log.getRelative(face).getType().name().contains("LOG")) {
+                                    Block block = log.getRelative(face);
+                                    if (block.getType().name().contains("LOG")) {
                                         Chunk chunk = block.getChunk();
                                         if (chunkAPI.canBreakInChunk(uuid, chunk)) {
-                                            blocks.add(log.getRelative(face));
+                                            blocks.add(block);
                                         }
                                     }
                                 }

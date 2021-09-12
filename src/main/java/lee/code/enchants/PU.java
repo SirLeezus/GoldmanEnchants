@@ -8,15 +8,17 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.text.DecimalFormat;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -117,5 +119,18 @@ public class PU {
         data.addPlayerClickDelay(uuid);
         BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
         scheduler.runTaskLater(plugin, () -> data.removePlayerClickDelay(uuid), 5);
+    }
+
+    public ItemMeta applyCustomEnchant(ItemMeta itemMeta, Enchantment enchantment, int level) {
+        itemMeta.addEnchant(enchantment, level, false);
+        Component enchantLore = Enchants.valueOf(enchantment.getKey().getKey().toUpperCase()).getLore(null);
+        List<Component> lore = itemMeta.lore();
+        if (lore != null) {
+            lore.add(enchantLore);
+            itemMeta.lore(lore);
+        } else {
+            itemMeta.lore(Collections.singletonList(enchantLore));
+        }
+        return itemMeta;
     }
 }

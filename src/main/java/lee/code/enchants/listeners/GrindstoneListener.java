@@ -1,45 +1,33 @@
 package lee.code.enchants.listeners;
 
-import lee.code.enchants.GoldmanEnchants;
-import lee.code.enchants.lists.Enchants;
-import net.kyori.adventure.text.Component;
+import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.GrindstoneInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.List;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 
 public class GrindstoneListener implements Listener {
 
     @EventHandler
-    public void onGrindStonePlaceItem(InventoryClickEvent e) {
-        GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
+    public void onPrepareGrindstone(PrepareResultEvent e) {
+        Inventory inventory = e.getInventory();
 
-        Inventory inventory = e.getClickedInventory();
-        if (inventory != null) {
-            if (e.getClickedInventory().getType() == InventoryType.GRINDSTONE) {
-                int slot = e.getSlot();
-                if (slot == 2) {
-                    ItemStack item = e.getCurrentItem();
-                    if (item != null && !item.getType().equals(Material.AIR)) {
-                        ItemMeta itemMeta = item.getItemMeta();
-                        List<Component> lore = itemMeta.lore();
-                        List<String> kLore = plugin.getPU().getEnchantKeys();
-                        if (lore != null) {
-                            for (String key : kLore) {
-                                lore.removeIf(line -> line.equals(Enchants.valueOf(key).getLore(null)));
-                            }
-                            itemMeta.lore(lore);
-                        }
-                        item.setItemMeta(itemMeta);
-                        e.setCurrentItem(item);
-                    }
-                }
+        if (inventory instanceof GrindstoneInventory) {
+            ItemStack[] contents = inventory.getContents();
+            ItemStack firstSlot = contents[0];
+            ItemStack secondSlot = contents[1];
+
+            if (firstSlot != null) {
+                System.out.println("Slot 1");
+                ItemStack newStack = firstSlot.getItemMeta() instanceof EnchantmentStorageMeta ? new ItemStack(Material.BOOK) : new ItemStack(firstSlot.getType(), firstSlot.getAmount());
+                e.setResult(newStack);
+            } else if (secondSlot != null) {
+                System.out.println("Slot 2");
+                ItemStack newStack = secondSlot.getItemMeta() instanceof EnchantmentStorageMeta ? new ItemStack(Material.BOOK) : new ItemStack(secondSlot.getType(), secondSlot.getAmount());
+                e.setResult(newStack);
             }
         }
     }
