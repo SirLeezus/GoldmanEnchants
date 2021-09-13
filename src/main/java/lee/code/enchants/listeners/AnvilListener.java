@@ -68,7 +68,7 @@ public class AnvilListener implements Listener {
             ItemMeta secondItemMeta = secondSlot.getItemMeta();
             CustomEnchants customEnchants = plugin.getCustomEnchants();
 
-            if (EnchantmentTarget.TOOL.includes(secondSlot.getType()) || EnchantmentTarget.WEAPON.includes(secondSlot.getType()) || secondSlot.getType().equals(Material.ENCHANTED_BOOK)) {
+            if (EnchantmentTarget.TOOL.includes(secondSlot.getType()) || EnchantmentTarget.WEAPON.includes(secondSlot.getType()) || EnchantmentTarget.ARMOR.includes(secondSlot.getType()) || secondSlot.getType().equals(Material.ENCHANTED_BOOK)) {
                 ItemStack dupe = firstSlot.clone();
                 ItemMeta dupeMeta = dupe.getItemMeta();
 
