@@ -141,7 +141,13 @@ public class PU {
         CoreProtectAPI cp = plugin.getCoreProtectAPI();
 
         cp.logRemoval(player.getName(), block.getLocation(), block.getType(), block.getBlockData());
-        if (fortune && block.getType().name().contains("ORE") && block.getType().name().contains("CLUSTER")) {
+        if (silkTouch) {
+            ItemStack item = new ItemStack(block.getType());
+            block.setType(Material.AIR);
+            block.getWorld().dropItemNaturally(block.getLocation(), item);
+            return;
+
+        } else if (fortune && block.getType().name().contains("ORE") && block.getType().name().contains("CLUSTER")) {
             List<ItemStack> drops = new ArrayList<>(block.getDrops());
             if (!drops.isEmpty()) {
                 int amount = getDropCount(fortuneLevel, new Random());
@@ -151,11 +157,6 @@ public class PU {
                 block.getWorld().dropItemNaturally(block.getLocation(), item);
                 return;
             }
-        } else if (silkTouch) {
-            ItemStack item = new ItemStack(block.getType());
-            block.setType(Material.AIR);
-            block.getWorld().dropItemNaturally(block.getLocation(), item);
-            return;
         }
         block.breakNaturally();
     }
