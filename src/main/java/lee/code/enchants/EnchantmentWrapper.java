@@ -63,9 +63,8 @@ public class EnchantmentWrapper extends Enchantment {
     }
 
     @Override
-    public boolean canEnchantItem(@NotNull ItemStack itemStack) {
-        Material type = itemStack.getType();
-        return Arrays.asList(enchantItems).contains(type);
+    public boolean canEnchantItem(@NotNull ItemStack item) {
+        return Arrays.asList(enchantItems).contains(item.getType());
     }
 
     @Override

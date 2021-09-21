@@ -2,6 +2,7 @@ package lee.code.enchants.listeners.enchants;
 
 import lee.code.chunks.ChunkAPI;
 import lee.code.enchants.GoldmanEnchants;
+import lee.code.enchants.PU;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -25,6 +26,7 @@ public class DestroyerListener implements Listener {
     @EventHandler
     public void onDestroyerBlockBreak(BlockBreakEvent e) {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
+        PU pu = plugin.getPU();
 
         Player player = e.getPlayer();
         ItemStack handItem = player.getInventory().getItemInMainHand();
@@ -32,32 +34,8 @@ public class DestroyerListener implements Listener {
         if (itemMeta != null && itemMeta.hasEnchant(plugin.getCustomEnchants().DESTROYER)) {
             Block block = e.getBlock();
             List<Block> blocks = getBlocks(player.getUniqueId(), block.getRelative(getDirection(player)));
-            blocks.remove(block);
-            for (Block sBlock : blocks) {
-                Material type = sBlock.getType();
-                if (!type.equals(Material.BEDROCK) && !type.equals(Material.AIR) && !type.equals(Material.WATER) && !type.equals(Material.LAVA) && !type.name().contains("SIGN") && !(block.getState() instanceof Container)) {
-                    if (!sBlock.getDrops().isEmpty()) {
-                        if (itemMeta.hasEnchant(Enchantment.SILK_TOUCH)) {
-                            player.getWorld().dropItemNaturally(sBlock.getLocation(), new ItemStack(sBlock.getType()));
-                            sBlock.setType(Material.AIR);
-                        } else if (itemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
-                            if (sBlock.getType().name().contains("ORE") || sBlock.getType().name().contains("CLUSTER")) {
-                                if (plugin.getPU().enchantDestroyerLootingRNG() > 10) {
-                                    List<ItemStack> drops = new ArrayList<>(sBlock.getDrops());
-                                    ItemStack item = drops.get(0);
-                                    if (item.getType() != Material.AIR) {
-                                        item.setAmount(itemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS) * item.getAmount());
-                                        drops.set(0, item);
-                                    }
-                                    for (ItemStack drop : drops) {
-                                        sBlock.setType(Material.AIR);
-                                        player.getWorld().dropItemNaturally(sBlock.getLocation(), drop);
-                                    }
-                                } else sBlock.breakNaturally();
-                            } else sBlock.breakNaturally();
-                        } else sBlock.breakNaturally();
-                    } else sBlock.breakNaturally();
-                }
+            if (!blocks.isEmpty()) {
+                for (Block sBlock : blocks) pu.breakBlock(player, sBlock, itemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.hasEnchant(Enchantment.SILK_TOUCH));
             }
         }
     }
@@ -76,7 +54,12 @@ public class DestroyerListener implements Listener {
                     Block block = loc.getBlock();
                     Chunk chunk = block.getChunk();
                     if (chunkAPI.canBreakInChunk(uuid, chunk)) {
-                        if (!blocks.contains(block)) blocks.add(block);
+                        if (!blocks.contains(block)) {
+                            Material type = block.getType();
+                            if (!type.equals(Material.SPAWNER) && !type.equals(Material.BEDROCK) && !type.equals(Material.AIR) && !type.equals(Material.WATER) && !type.equals(Material.LAVA) && !type.name().contains("SIGN") && !(block.getState() instanceof Container)) {
+                                blocks.add(block);
+                            }
+                        }
                     }
                 }
             }

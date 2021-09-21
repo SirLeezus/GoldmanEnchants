@@ -1,6 +1,7 @@
 package lee.code.enchants;
 
 import lee.code.enchants.lists.Enchants;
+import net.coreprotect.CoreProtectAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -9,9 +10,10 @@ import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -132,5 +134,35 @@ public class PU {
             itemMeta.lore(Collections.singletonList(enchantLore));
         }
         return itemMeta;
+    }
+
+    public void breakBlock(Player player, Block block, boolean fortune, int fortuneLevel, boolean silkTouch) {
+        GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
+        CoreProtectAPI cp = plugin.getCoreProtectAPI();
+
+        cp.logRemoval(player.getName(), block.getLocation(), block.getType(), block.getBlockData());
+        if (fortune && block.getType().name().contains("ORE") && block.getType().name().contains("CLUSTER")) {
+            List<ItemStack> drops = new ArrayList<>(block.getDrops());
+            if (!drops.isEmpty()) {
+                int amount = getDropCount(fortuneLevel, new Random());
+                ItemStack item = new ItemStack(drops.get(0));
+                item.setAmount(amount);
+                block.setType(Material.AIR);
+                block.getWorld().dropItemNaturally(block.getLocation(), item);
+                return;
+            }
+        } else if (silkTouch) {
+            ItemStack item = new ItemStack(block.getType());
+            block.setType(Material.AIR);
+            block.getWorld().dropItemNaturally(block.getLocation(), item);
+            return;
+        }
+        block.breakNaturally();
+    }
+
+    private int getDropCount(int level, Random random) {
+        int j = random.nextInt(level + 2) - 1;
+        if (j < 0) j = 0;
+        return (j + 1);
     }
 }

@@ -7,6 +7,7 @@ import lee.code.enchants.listeners.GrindstoneListener;
 import lee.code.enchants.listeners.enchants.*;
 import lee.code.essentials.EssentialsAPI;
 import lombok.Getter;
+import net.coreprotect.CoreProtectAPI;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class GoldmanEnchants extends JavaPlugin {
@@ -16,6 +17,7 @@ public class GoldmanEnchants extends JavaPlugin {
     @Getter private Data data;
     @Getter private ChunkAPI chunkAPI;
     @Getter private EssentialsAPI essentialsAPI;
+    @Getter private CoreProtectAPI coreProtectAPI;
 
     @Override
     public void onEnable() {
@@ -24,6 +26,7 @@ public class GoldmanEnchants extends JavaPlugin {
         this.customEnchants = new CustomEnchants();
         this.chunkAPI = new ChunkAPI();
         this.essentialsAPI = new EssentialsAPI();
+        this.coreProtectAPI = new CoreProtectAPI();
 
         registerListeners();
         customEnchants.register();

@@ -3,4 +3,4 @@ main: lee.code.enchants.GoldmanEnchants
 version: ${project.version}
 api-version: 1.17
 author: Lee
-depend: [GoldmanChunks, GoldmanEssentials]
+depend: [GoldmanChunks, GoldmanEssentials, CoreProtect]

@@ -2,6 +2,7 @@ package lee.code.enchants.listeners.enchants;
 
 import lee.code.chunks.ChunkAPI;
 import lee.code.enchants.GoldmanEnchants;
+import lee.code.enchants.PU;
 import org.bukkit.Chunk;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -23,6 +24,7 @@ public class LoggerListener implements Listener {
     @EventHandler
     public void onLoggerBlockBreak(BlockBreakEvent e) {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
+        PU pu = plugin.getPU();
         ChunkAPI chunkAPI = plugin.getChunkAPI();
 
         Player player = e.getPlayer();
@@ -44,7 +46,7 @@ public class LoggerListener implements Listener {
                         if (!blocks.isEmpty()) {
                             for (int i = 0; i < blocks.size(); i++) {
                                 Block log = blocks.get(i);
-                                log.breakNaturally();
+                                pu.breakBlock(player, log, false, 0, false);
                                 log.getWorld().playSound(log.getLocation(), Sound.BLOCK_WOOD_BREAK, 1, 1);
 
                                 for (BlockFace face : BlockFace.values()) {

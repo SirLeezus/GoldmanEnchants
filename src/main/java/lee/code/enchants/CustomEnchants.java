@@ -1,6 +1,5 @@
 package lee.code.enchants;
 
-import lee.code.enchants.lists.Enchants;
 import lee.code.enchants.lists.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -14,11 +13,11 @@ import java.util.stream.Collectors;
 
 public class CustomEnchants {
 
-    public final Enchantment LOGGER = new EnchantmentWrapper("logger", "Logger", 0, new Material[] {Material.ENCHANTED_BOOK, Material.BOOK, Material.DIAMOND_AXE, Material.NETHERITE_AXE} );
-    public final Enchantment DESTROYER = new EnchantmentWrapper("destroyer", "Destroyer", 0, new Material[] {Material.ENCHANTED_BOOK, Material.BOOK, Material.DIAMOND_PICKAXE, Material.NETHERITE_PICKAXE, Material.DIAMOND_SHOVEL, Material.NETHERITE_SHOVEL} );
-    public final Enchantment LIGHTNING_STRIKE = new EnchantmentWrapper("lightning_strike", "Lightning Strike", 0, new Material[] {Material.ENCHANTED_BOOK, Material.BOOK, Material.DIAMOND_SWORD, Material.NETHERITE_SWORD} );
-    public final Enchantment SOUL_BOUND = new EnchantmentWrapper("soul_bound", "Soul Bound", 0, new Material[] {Material.ENCHANTED_BOOK, Material.BOOK, Material.ELYTRA, Material.FISHING_ROD, Material.BOW, Material.CROSSBOW, Material.TRIDENT, Material.DIAMOND_SHOVEL, Material.NETHERITE_SHOVEL, Material.DIAMOND_AXE, Material.NETHERITE_AXE, Material.DIAMOND_HOE, Material.NETHERITE_HOE, Material.DIAMOND_SWORD, Material.NETHERITE_SWORD, Material.DIAMOND_PICKAXE, Material.NETHERITE_PICKAXE, Material.DIAMOND_CHESTPLATE, Material.NETHERITE_CHESTPLATE, Material.DIAMOND_HELMET, Material.NETHERITE_HELMET, Material.DIAMOND_LEGGINGS, Material.NETHERITE_LEGGINGS, Material.DIAMOND_BOOTS, Material.NETHERITE_BOOTS} );
-    public final Enchantment AUTO_SELL = new EnchantmentWrapper("auto_sell", "Auto Sell", 0, new Material[] {Material.ENCHANTED_BOOK, Material.BOOK, Material.DIAMOND_HOE, Material.NETHERITE_HOE} );
+    public final Enchantment LOGGER = new EnchantmentWrapper("logger", "Logger", 0, new Material[] {Material.ENCHANTED_BOOK, Material.BOOK, Material.DIAMOND_AXE, Material.NETHERITE_AXE});
+    public final Enchantment DESTROYER = new EnchantmentWrapper("destroyer", "Destroyer", 0, new Material[] {Material.ENCHANTED_BOOK, Material.BOOK, Material.DIAMOND_PICKAXE, Material.NETHERITE_PICKAXE, Material.DIAMOND_SHOVEL, Material.NETHERITE_SHOVEL});
+    public final Enchantment LIGHTNING_STRIKE = new EnchantmentWrapper("lightning_strike", "Lightning Strike", 0, new Material[] {Material.ENCHANTED_BOOK, Material.BOOK, Material.DIAMOND_SWORD, Material.NETHERITE_SWORD});
+    public final Enchantment SOUL_BOUND = new EnchantmentWrapper("soul_bound", "Soul Bound", 0, new Material[] {Material.ENCHANTED_BOOK, Material.BOOK, Material.ELYTRA, Material.FISHING_ROD, Material.BOW, Material.CROSSBOW, Material.TRIDENT, Material.DIAMOND_SHOVEL, Material.NETHERITE_SHOVEL, Material.DIAMOND_AXE, Material.NETHERITE_AXE, Material.DIAMOND_HOE, Material.NETHERITE_HOE, Material.DIAMOND_SWORD, Material.NETHERITE_SWORD, Material.DIAMOND_PICKAXE, Material.NETHERITE_PICKAXE, Material.DIAMOND_CHESTPLATE, Material.NETHERITE_CHESTPLATE, Material.DIAMOND_HELMET, Material.NETHERITE_HELMET, Material.DIAMOND_LEGGINGS, Material.NETHERITE_LEGGINGS, Material.DIAMOND_BOOTS, Material.NETHERITE_BOOTS});
+    public final Enchantment AUTO_SELL = new EnchantmentWrapper("auto_sell", "Auto Sell", 0, new Material[] {Material.ENCHANTED_BOOK, Material.BOOK, Material.DIAMOND_HOE, Material.NETHERITE_HOE});
 
     public void register() {
         List<Enchantment> customEnchants = Arrays.asList(LOGGER, DESTROYER, LIGHTNING_STRIKE, SOUL_BOUND, AUTO_SELL);
