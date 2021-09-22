@@ -34,6 +34,7 @@ public class DestroyerListener implements Listener {
         if (itemMeta != null && itemMeta.hasEnchant(plugin.getCustomEnchants().DESTROYER)) {
             Block block = e.getBlock();
             List<Block> blocks = getBlocks(player.getUniqueId(), block.getRelative(getDirection(player)));
+            blocks.remove(block);
             if (!blocks.isEmpty()) {
                 for (Block sBlock : blocks) pu.breakBlock(player, sBlock, itemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.hasEnchant(Enchantment.SILK_TOUCH));
             }
