@@ -1,11 +1,14 @@
 package lee.code.enchants;
 
 import lee.code.chunks.ChunkAPI;
+import lee.code.enchants.commands.CustomEnchantCMD;
+import lee.code.enchants.commands.CustomEnchantTab;
 import lee.code.enchants.listeners.AnvilListener;
 import lee.code.enchants.listeners.EnchantListener;
 import lee.code.enchants.listeners.GrindstoneListener;
 import lee.code.enchants.listeners.enchants.*;
 import lee.code.essentials.EssentialsAPI;
+import lee.code.pets.PetsAPI;
 import lombok.Getter;
 import net.coreprotect.CoreProtectAPI;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,6 +20,7 @@ public class GoldmanEnchants extends JavaPlugin {
     @Getter private Data data;
     @Getter private ChunkAPI chunkAPI;
     @Getter private EssentialsAPI essentialsAPI;
+    @Getter private PetsAPI petsAPI;
     @Getter private CoreProtectAPI coreProtectAPI;
 
     @Override
@@ -27,9 +31,11 @@ public class GoldmanEnchants extends JavaPlugin {
         this.chunkAPI = new ChunkAPI();
         this.essentialsAPI = new EssentialsAPI();
         this.coreProtectAPI = new CoreProtectAPI();
+        this.petsAPI = new PetsAPI();
 
         registerListeners();
         customEnchants.register();
+        registerCommands();
     }
 
     @Override
@@ -38,7 +44,8 @@ public class GoldmanEnchants extends JavaPlugin {
     }
 
     private void registerCommands() {
-
+        getCommand("customenchant").setExecutor(new CustomEnchantCMD());
+        getCommand("customenchant").setTabCompleter(new CustomEnchantTab());
     }
 
     private void registerListeners() {
@@ -50,6 +57,7 @@ public class GoldmanEnchants extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new LightningStrikeListener(), this);
         getServer().getPluginManager().registerEvents(new SoulBoundListener(), this);
         getServer().getPluginManager().registerEvents(new AutoSellListener(), this);
+        getServer().getPluginManager().registerEvents(new SoulReaperListener(), this);
     }
 
     public static GoldmanEnchants getPlugin() {

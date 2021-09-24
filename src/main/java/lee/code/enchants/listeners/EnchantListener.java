@@ -19,7 +19,7 @@ public class EnchantListener implements Listener {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
         PU pu = plugin.getPU();
 
-        if (pu.enchantChanceRNG() > 800) {
+        if (pu.enchantChanceRNG() > 700) {
             Player player = e.getEnchanter();
             Location blockLocation = e.getEnchantBlock().getLocation();
             int level = e.getExpLevelCost();
@@ -29,50 +29,13 @@ public class EnchantListener implements Listener {
             if (itemMeta != null) {
                 if (level == 30) {
                     int rng = pu.enchantChoiceRNG();
-
-                    switch (rng) {
-
-                        case 0 -> {
-                            if (enchants.LOGGER.canEnchantItem(item)) {
-                                item.setItemMeta(pu.applyCustomEnchant(itemMeta, enchants.LOGGER, 0));
-                                playSound(player, blockLocation);
-                            }
-                        }
-
-                        case 1 -> {
-                            if (enchants.DESTROYER.canEnchantItem(item)) {
-                                item.setItemMeta(pu.applyCustomEnchant(itemMeta, enchants.DESTROYER, 0));
-                                playSound(player, blockLocation);
-                            }
-                        }
-
-                        case 2 -> {
-                            if (enchants.LIGHTNING_STRIKE.canEnchantItem(item)) {
-                                item.setItemMeta(pu.applyCustomEnchant(itemMeta, enchants.LIGHTNING_STRIKE, 0));
-                                playSound(player, blockLocation);
-                            }
-                        }
-
-                        case 3 -> {
-                            if (enchants.SOUL_BOUND.canEnchantItem(item)) {
-                                item.setItemMeta(pu.applyCustomEnchant(itemMeta, enchants.SOUL_BOUND, 0));
-                                playSound(player, blockLocation);
-                            }
-                        }
-
-                        case 4 -> {
-                            if (enchants.AUTO_SELL.canEnchantItem(item)) {
-                                item.setItemMeta(pu.applyCustomEnchant(itemMeta, enchants.AUTO_SELL, 0));
-                                playSound(player, blockLocation);
-                            }
-                        }
+                    String key = pu.getEnchantKeys().get(rng);
+                    if (enchants.valueOf(key).canEnchantItem(item)) {
+                        item.setItemMeta(pu.applyCustomEnchant(itemMeta, enchants.valueOf(key), 0));
+                        player.getWorld().playSound(blockLocation, Sound.ENTITY_ILLUSIONER_PREPARE_BLINDNESS, (float) 1, (float) 1);
                     }
                 }
             }
         }
-    }
-
-    private void playSound(Player player, Location location) {
-        player.getWorld().playSound(location, Sound.ENTITY_ILLUSIONER_PREPARE_BLINDNESS, 1, 1);
     }
 }

@@ -1,24 +1,30 @@
 package lee.code.enchants;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import lee.code.enchants.lists.Enchants;
 import net.coreprotect.CoreProtectAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.minecraft.nbt.MojangsonParser;
+import net.minecraft.nbt.NBTTagCompound;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
-
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -28,9 +34,8 @@ public class PU {
 
     private final Random random = new Random();
 
-    public String format(String format) {
-        return ChatColor.translateAlternateColorCodes('&', format);
-    }
+    public String format(String format) { return ChatColor.translateAlternateColorCodes('&', format); }
+
 
     public Component formatC(String message) {
         LegacyComponentSerializer serializer = LegacyComponentSerializer.legacyAmpersand();
@@ -48,10 +53,6 @@ public class PU {
 
     public int enchantChoiceRNG() {
         return random.nextInt(getEnchantKeys().size());
-    }
-
-    public int enchantDestroyerLootingRNG() {
-        return random.nextInt(25);
     }
 
     public String formatCapitalization(String message) {
@@ -165,5 +166,23 @@ public class PU {
         int j = random.nextInt(level + 2) - 1;
         if (j < 0) j = 0;
         return (j + 1);
+    }
+
+    public String getNBTCompoundData(Entity entity) {
+        net.minecraft.world.entity.Entity nmsEntity = ((CraftEntity) entity).getHandle(); //Converting our Entity to NMS
+        NBTTagCompound nbtTagCompound = new NBTTagCompound();
+        nmsEntity.save(nbtTagCompound);
+        return nbtTagCompound.toString();
+    }
+
+    public void spawnEntity(String nbtTagCompound, EntityType type, Location location) {
+        Entity entity = location.getWorld().spawnEntity(location, type);
+        net.minecraft.world.entity.Entity nmsEntity = ((CraftEntity) entity).getHandle();
+        try {
+            nmsEntity.load(MojangsonParser.parse(nbtTagCompound));
+        } catch (CommandSyntaxException ex) {
+            ex.printStackTrace();
+        }
+        entity.teleport(location);
     }
 }

@@ -51,6 +51,14 @@
             <version>1.17.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <!-- Spigot API -->
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-17-api</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>C:\Users\Lee\Documents\APIs\spigot-1.17.1.jar</systemPath>
+        </dependency>
         <!-- Lombok API -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -64,6 +72,14 @@
             <version>1.0</version>
             <scope>system</scope>
             <systemPath>C:\Users\Lee\Documents\APIs\ChunkAPI.jar</systemPath>
+        </dependency>
+        <!-- GoldmanPets API -->
+        <dependency>
+            <groupId>lee.code.pets</groupId>
+            <artifactId>pets-api</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>C:\Users\Lee\Documents\APIs\PetsAPI.jar</systemPath>
         </dependency>
         <!-- GoldmanEssentials API -->
         <dependency>

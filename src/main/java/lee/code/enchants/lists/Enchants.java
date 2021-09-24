@@ -12,6 +12,7 @@ public enum Enchants {
     DESTROYER("&#DE0000Destroyer"),
     LIGHTNING_STRIKE("&#FCFF35Lightning Strike"),
     SOUL_BOUND("&#6A00E1Soul Bound"),
+    SOUL_REAPER("&#FF00E4Soul Reaper"),
     AUTO_SELL("&#FF9709Auto Sell"),
     ;
 
