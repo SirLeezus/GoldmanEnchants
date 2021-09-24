@@ -14,7 +14,6 @@ public enum Lang {
     LIGHTNING_STRIKE_DELAY("&cYou can use lightning strike again in {0}&c."),
     ENCHANT_COMMAND_SUCCESSFUL("&aYou enchanted your hand item with &3{0}&a!"),
     ERROR_LIGHTNING_STRIKE_CHUNK("&cYou can't strike chunks you can't build in."),
-    ERROR_SOUL_REAPER_CHUNK("&cYou can't release entities in chunks you can't build in."),
     ERROR_AUTO_SELL_NO_VALUE("&cThis container does not have any items of value."),
     ERROR_NOT_CONSOLE_COMMAND("&cThis command does not work in console."),
     AUTO_SELL_SUCCESSFUL("&6[&e!&6] &aYou successfully sold &b{0} &aitems &afor &6${1}&a!"),

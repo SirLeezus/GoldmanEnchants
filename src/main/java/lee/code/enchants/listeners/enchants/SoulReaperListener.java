@@ -4,7 +4,6 @@ import lee.code.chunks.ChunkAPI;
 import lee.code.enchants.Data;
 import lee.code.enchants.GoldmanEnchants;
 import lee.code.enchants.PU;
-import lee.code.enchants.lists.Lang;
 import lee.code.pets.PetsAPI;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -101,7 +100,7 @@ public class SoulReaperListener implements Listener {
                                 world.playEffect(newLoc, Effect.ENDER_SIGNAL, 1);
                                 world.playSound(newLoc, Sound.ENTITY_ENDERMAN_TELEPORT, (float) 1, (float) 1);
                             }
-                        } else player.sendActionBar(Lang.ERROR_SOUL_REAPER_CHUNK.getComponent(null));
+                        }
                     }
                 }
             }
