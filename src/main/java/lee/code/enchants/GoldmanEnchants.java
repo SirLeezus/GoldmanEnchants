@@ -18,6 +18,7 @@ public class GoldmanEnchants extends JavaPlugin {
     @Getter private CustomEnchants customEnchants;
     @Getter private PU pU;
     @Getter private Data data;
+    @Getter private EnchantsAPI enchantsAPI;
     @Getter private ChunkAPI chunkAPI;
     @Getter private EssentialsAPI essentialsAPI;
     @Getter private PetsAPI petsAPI;
@@ -28,6 +29,7 @@ public class GoldmanEnchants extends JavaPlugin {
         this.pU = new PU();
         this.data = new Data();
         this.customEnchants = new CustomEnchants();
+        this.enchantsAPI = new EnchantsAPI();
         this.chunkAPI = new ChunkAPI();
         this.essentialsAPI = new EssentialsAPI();
         this.coreProtectAPI = new CoreProtectAPI();
