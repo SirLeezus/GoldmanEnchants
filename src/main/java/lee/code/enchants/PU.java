@@ -2,6 +2,7 @@ package lee.code.enchants;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import lee.code.enchants.lists.Enchants;
+import lee.code.essentials.EssentialsAPI;
 import net.coreprotect.CoreProtectAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -139,9 +140,11 @@ public class PU {
 
     public void breakBlock(Player player, Block block, boolean fortune, int fortuneLevel, boolean silkTouch) {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
+        EssentialsAPI essentialsAPI = plugin.getEssentialsAPI();
         CoreProtectAPI cp = plugin.getCoreProtectAPI();
 
         cp.logRemoval(player.getName(), block.getLocation(), block.getType(), block.getBlockData());
+        int booster = essentialsAPI.isBoosterActive() ? essentialsAPI.getBoosterMultiplier() : 0;
         if (silkTouch) {
             ItemStack item = new ItemStack(block.getType());
             block.setType(Material.AIR);
@@ -151,7 +154,7 @@ public class PU {
         } else if (fortune && block.getType().name().contains("ORE") && block.getType().name().contains("CLUSTER")) {
             List<ItemStack> drops = new ArrayList<>(block.getDrops());
             if (!drops.isEmpty()) {
-                int amount = getDropCount(fortuneLevel, new Random());
+                int amount = getDropCount(fortuneLevel, new Random()) * booster;
                 ItemStack item = new ItemStack(drops.get(0));
                 item.setAmount(amount);
                 block.setType(Material.AIR);
@@ -159,7 +162,17 @@ public class PU {
                 return;
             }
         }
-        block.breakNaturally();
+        if (booster > 0) {
+            List<ItemStack> drops = new ArrayList<>();
+            if (!block.getDrops().isEmpty()) {
+                for (ItemStack item : new ArrayList<>(block.getDrops())) {
+                    item.setAmount(item.getAmount() * booster);
+                    drops.add(item);
+                }
+            }
+            for (ItemStack item : drops) block.getWorld().dropItemNaturally(block.getLocation(), item);
+            block.setType(Material.AIR);
+        } else block.breakNaturally();
     }
 
     private int getDropCount(int level, Random random) {

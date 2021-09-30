@@ -1,6 +1,7 @@
 package lee.code.enchants.listeners.enchants;
 
 import lee.code.chunks.ChunkAPI;
+import lee.code.enchants.CustomEnchants;
 import lee.code.enchants.Data;
 import lee.code.enchants.GoldmanEnchants;
 import lee.code.enchants.PU;
@@ -29,6 +30,7 @@ public class SoulReaperListener implements Listener {
         Data data = plugin.getData();
         PetsAPI petsAPI = plugin.getPetsAPI();
         PU pu = plugin.getPU();
+        CustomEnchants customEnchants = plugin.getCustomEnchants();
 
         if (!e.isCancelled()) {
             Player player = e.getPlayer();
@@ -36,7 +38,7 @@ public class SoulReaperListener implements Listener {
             if (player.isSneaking()) {
                 ItemStack handItem = player.getInventory().getItemInMainHand();
                 ItemMeta meta = handItem.getItemMeta();
-                if (meta.hasEnchant(plugin.getCustomEnchants().SOUL_REAPER)) {
+                if (meta != null && meta.hasEnchant(customEnchants.SOUL_REAPER)) {
                     Entity entity = e.getRightClicked();
                     if (entity instanceof Mob)  {
                         if (data.hasPlayerClickDelay(uuid)) return;
@@ -74,6 +76,7 @@ public class SoulReaperListener implements Listener {
         Data data = plugin.getData();
         ChunkAPI chunkAPI = plugin.getChunkAPI();
         PU pu = plugin.getPU();
+        CustomEnchants customEnchants = plugin.getCustomEnchants();
 
         Player player = e.getPlayer();
         if (player.isSneaking()) {
@@ -81,7 +84,7 @@ public class SoulReaperListener implements Listener {
                 ItemStack handItem = player.getInventory().getItemInMainHand();
                 ItemMeta itemMeta = handItem.getItemMeta();
                 UUID uuid = player.getUniqueId();
-                if (itemMeta != null && itemMeta.hasEnchant(plugin.getCustomEnchants().SOUL_REAPER)) {
+                if (itemMeta != null && itemMeta.hasEnchant(customEnchants.SOUL_REAPER)) {
                     e.setCancelled(true);
                     if (data.hasPlayerClickDelay(uuid)) return;
                     else pu.addPlayerClickDelay(uuid);
