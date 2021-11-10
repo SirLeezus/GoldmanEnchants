@@ -29,12 +29,16 @@ public class LoggerListener implements Listener {
 
         Player player = e.getPlayer();
         UUID uuid = player.getUniqueId();
+
+        CharSequence logName = "LOG";
         ItemStack handItem = player.getInventory().getItemInMainHand();
         ItemMeta itemMeta = handItem.getItemMeta();
+
         if (itemMeta != null && itemMeta.hasEnchant(plugin.getCustomEnchants().LOGGER)) {
             Block block = e.getBlock();
-            if (block.getType().name().contains("LOG")) {
+            if (block.getType().name().contains(logName)) {
                 List<Block> blocks = new ArrayList<>();
+                BlockFace[] faces = new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
                 blocks.add(block);
 
                 new BukkitRunnable() {
@@ -49,15 +53,25 @@ public class LoggerListener implements Listener {
                                 pu.breakBlock(player, log, false, 0, false);
                                 log.getWorld().playSound(log.getLocation(), Sound.BLOCK_WOOD_BREAK, 1, 1);
 
-                                for (BlockFace face : BlockFace.values()) {
+                                for (BlockFace face : faces) {
                                     Block block = log.getRelative(face);
-                                    if (block.getType().name().contains("LOG")) {
+                                    if (block.getType().name().contains(logName)) {
                                         Chunk chunk = block.getChunk();
                                         if (chunkAPI.canBreakInChunk(uuid, chunk)) {
-                                            blocks.add(block);
+                                            if (!blocks.contains(block)) blocks.add(block);
+                                        }
+                                    }
+                                    for (BlockFace face2 : faces) {
+                                        Block block2 = block.getRelative(face2);
+                                        if (block2.getType().name().contains(logName)) {
+                                            Chunk chunk = block2.getChunk();
+                                            if (chunkAPI.canBreakInChunk(uuid, chunk)) {
+                                                if (!blocks.contains(block2)) blocks.add(block2);
+                                            }
                                         }
                                     }
                                 }
+
                                 blocks.remove(log);
                                 count++;
                                 if (count >= maxLogs) blocks.clear();
