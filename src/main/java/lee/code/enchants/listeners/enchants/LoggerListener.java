@@ -42,7 +42,7 @@ public class LoggerListener implements Listener {
                 blocks.add(block);
 
                 new BukkitRunnable() {
-                    final int maxLogs = 100;
+                    final int maxLogs = 150;
                     int count = 0;
 
                     @Override
