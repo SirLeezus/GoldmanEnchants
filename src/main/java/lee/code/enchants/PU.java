@@ -16,7 +16,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_18_R1.entity.CraftEntity;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -184,7 +184,7 @@ public class PU {
     public String getNBTCompoundData(Entity entity) {
         net.minecraft.world.entity.Entity nmsEntity = ((CraftEntity) entity).getHandle(); //Converting our Entity to NMS
         NBTTagCompound nbtTagCompound = new NBTTagCompound();
-        nmsEntity.save(nbtTagCompound);
+        nmsEntity.f(nbtTagCompound); // f = save
         return nbtTagCompound.toString();
     }
 
@@ -192,7 +192,9 @@ public class PU {
         Entity entity = location.getWorld().spawnEntity(location, type);
         net.minecraft.world.entity.Entity nmsEntity = ((CraftEntity) entity).getHandle();
         try {
-            nmsEntity.load(MojangsonParser.parse(nbtTagCompound));
+            //g = load
+            //a = parse
+            nmsEntity.g(MojangsonParser.a(nbtTagCompound));
         } catch (CommandSyntaxException ex) {
             ex.printStackTrace();
         }
