@@ -57,7 +57,7 @@ public class DestroyerListener implements Listener {
                     if (chunkAPI.canBreakInChunk(uuid, chunk)) {
                         if (!blocks.contains(block)) {
                             Material type = block.getType();
-                            if (!type.equals(Material.SPAWNER) && !type.equals(Material.BEDROCK) && !type.equals(Material.AIR) && !type.equals(Material.WATER) && !type.equals(Material.LAVA) && !type.name().contains("SIGN") && !(block.getState() instanceof Container)) {
+                            if (type.isItem() && !type.equals(Material.SPAWNER) && !type.equals(Material.BEDROCK) && !type.equals(Material.AIR) && !type.equals(Material.WATER) && !type.equals(Material.LAVA) && !type.name().contains("SIGN") && !type.name().contains("CARPET") && !type.equals(Material.END_PORTAL) && !type.equals(Material.END_PORTAL_FRAME) && !type.equals(Material.NETHER_PORTAL) && !type.equals(Material.SNOW) && !(block.getState() instanceof Container)) {
                                 blocks.add(block);
                             }
                         }

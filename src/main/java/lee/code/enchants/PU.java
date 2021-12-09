@@ -148,7 +148,7 @@ public class PU {
         if (silkTouch) {
             ItemStack item = new ItemStack(block.getType());
             block.setType(Material.AIR);
-            block.getWorld().dropItemNaturally(block.getLocation(), item);
+            if (!item.getType().equals(Material.AIR)) block.getWorld().dropItemNaturally(block.getLocation(), item);
             return;
 
         } else if (fortune && block.getType().name().contains("ORE") && block.getType().name().contains("CLUSTER")) {
