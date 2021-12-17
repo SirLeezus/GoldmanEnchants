@@ -40,7 +40,8 @@ public class AutoSellListener implements Listener {
                             e.setCancelled(true);
                             if (data.hasPlayerClickDelay(uuid)) return;
                             else pu.addPlayerClickDelay(uuid);
-                            if (block.getState() instanceof Container container) {
+                            BlockState state = block.getState();
+                            if (state instanceof Container container && isSupportedContainer(state)) {
                                 long totalSellAmount = 0;
                                 int amountSold = 0;
                                 for (ItemStack item : container.getInventory().getContents()) {
@@ -49,7 +50,7 @@ public class AutoSellListener implements Listener {
                                         if (worth != 0) {
                                             totalSellAmount += (worth * item.getAmount());
                                             amountSold += item.getAmount();
-                                            removeItem(block, item);
+                                            removeItem(state, item);
                                         }
                                     }
                                 }
@@ -66,13 +67,17 @@ public class AutoSellListener implements Listener {
         }
     }
 
-    private void removeItem(Block block, ItemStack item) {
-        if (block.getState() instanceof Chest chest) {
+    private void removeItem(BlockState state, ItemStack item) {
+        if (state instanceof Chest chest) {
             chest.getInventory().removeItem(item);
-        } else if (block.getState() instanceof ShulkerBox shulkerBox) {
+        } else if (state instanceof ShulkerBox shulkerBox) {
             shulkerBox.getInventory().removeItem(item);
-        } else if (block.getState() instanceof Barrel barrel) {
+        } else if (state instanceof Barrel barrel) {
             barrel.getInventory().removeItem(item);
         }
+    }
+
+    private boolean isSupportedContainer(BlockState state) {
+        return state instanceof Chest || state instanceof ShulkerBox || state instanceof Barrel;
     }
 }
