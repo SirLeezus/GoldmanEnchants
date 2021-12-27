@@ -1,6 +1,7 @@
 package lee.code.enchants.lists;
 
 import lee.code.enchants.GoldmanEnchants;
+import lee.code.enchants.PU;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
@@ -23,17 +24,19 @@ public enum Lang {
 
     public String getString(String[] variables) {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
+        PU pu = plugin.getPU();
         String value = string;
-        if (variables == null || variables.length == 0) return plugin.getPU().format(value);
+        if (variables == null || variables.length == 0) return pu.format(value);
         for (int i = 0; i < variables.length; i++) value = value.replace("{" + i + "}", variables[i]);
-        return plugin.getPU().format(value);
+        return pu.format(value);
     }
 
     public Component getComponent(String[] variables) {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
+        PU pu = plugin.getPU();
         String value = string;
-        if (variables == null || variables.length == 0) return plugin.getPU().formatC(value);
+        if (variables == null || variables.length == 0) return pu.formatC(value);
         for (int i = 0; i < variables.length; i++) value = value.replace("{" + i + "}", variables[i]);
-        return plugin.getPU().formatC(value);
+        return pu.formatC(value);
     }
 }

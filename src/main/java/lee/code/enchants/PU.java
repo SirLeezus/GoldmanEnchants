@@ -2,6 +2,7 @@ package lee.code.enchants;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import lee.code.enchants.lists.Enchants;
+import lee.code.enchants.lists.SupportedLogs;
 import lee.code.essentials.EssentialsAPI;
 import net.coreprotect.CoreProtectAPI;
 import net.kyori.adventure.text.Component;
@@ -37,7 +38,6 @@ public class PU {
 
     public String format(String format) { return ChatColor.translateAlternateColorCodes('&', format); }
 
-
     public Component formatC(String message) {
         LegacyComponentSerializer serializer = LegacyComponentSerializer.legacyAmpersand();
         return Component.empty().decoration(TextDecoration.ITALIC, false).append(serializer.deserialize(message));
@@ -63,6 +63,10 @@ public class PU {
 
     public List<String> getEnchantKeys() {
         return EnumSet.allOf(Enchants.class).stream().map(Enchants::name).collect(Collectors.toList());
+    }
+
+    public List<String> getSupportedLogKeys() {
+        return EnumSet.allOf(SupportedLogs.class).stream().map(SupportedLogs::name).collect(Collectors.toList());
     }
 
     public void addLightningStrikeDelay(UUID uuid) {

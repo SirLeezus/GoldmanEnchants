@@ -30,13 +30,12 @@ public class LoggerListener implements Listener {
         Player player = e.getPlayer();
         UUID uuid = player.getUniqueId();
 
-        CharSequence logName = "LOG";
         ItemStack handItem = player.getInventory().getItemInMainHand();
         ItemMeta itemMeta = handItem.getItemMeta();
 
         if (itemMeta != null && itemMeta.hasEnchant(plugin.getCustomEnchants().LOGGER)) {
             Block block = e.getBlock();
-            if (block.getType().name().contains(logName)) {
+            if (pu.getSupportedLogKeys().contains(block.getType().name())) {
                 List<Block> blocks = new ArrayList<>();
                 BlockFace[] faces = new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
                 blocks.add(block);
@@ -55,7 +54,7 @@ public class LoggerListener implements Listener {
 
                                 for (BlockFace face : faces) {
                                     Block block = log.getRelative(face);
-                                    if (block.getType().name().contains(logName)) {
+                                    if (pu.getSupportedLogKeys().contains(block.getType().name())) {
                                         Chunk chunk = block.getChunk();
                                         if (chunkAPI.canBreakInChunk(uuid, chunk)) {
                                             if (!blocks.contains(block)) blocks.add(block);
@@ -63,7 +62,7 @@ public class LoggerListener implements Listener {
                                     }
                                     for (BlockFace face2 : faces) {
                                         Block block2 = block.getRelative(face2);
-                                        if (block2.getType().name().contains(logName)) {
+                                        if (pu.getSupportedLogKeys().contains(block2.getType().name())) {
                                             Chunk chunk = block2.getChunk();
                                             if (chunkAPI.canBreakInChunk(uuid, chunk)) {
                                                 if (!blocks.contains(block2)) blocks.add(block2);
