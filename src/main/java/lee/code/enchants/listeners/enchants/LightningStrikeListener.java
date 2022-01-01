@@ -8,6 +8,7 @@ import lee.code.enchants.lists.Lang;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -41,7 +42,7 @@ public class LightningStrikeListener implements Listener {
                             Chunk chunk = location.getChunk();
                             if (chunkAPI.canBreakInChunk(uuid, chunk)) {
                                 pu.addLightningStrikeDelay(uuid);
-                                location.getWorld().strikeLightning(location);
+                                location.getWorld().strikeLightning(location).setCausingPlayer(player);
                             } else player.sendActionBar(Lang.ERROR_LIGHTNING_STRIKE_CHUNK.getComponent(null));
                         }
                     } else {
