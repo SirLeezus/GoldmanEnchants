@@ -10,7 +10,6 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -24,32 +23,34 @@ import java.util.UUID;
 
 public class SoulReaperListener implements Listener {
 
-    @EventHandler (priority = EventPriority.MONITOR)
+    @EventHandler
     public void onSoulReaperCapture(PlayerInteractEntityEvent e) {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
         Data data = plugin.getData();
         PetsAPI petsAPI = plugin.getPetsAPI();
+        ChunkAPI chunkAPI = plugin.getChunkAPI();
         PU pu = plugin.getPU();
         CustomEnchants customEnchants = plugin.getCustomEnchants();
 
-        if (!e.isCancelled()) {
-            Player player = e.getPlayer();
-            UUID uuid = player.getUniqueId();
-            if (player.isSneaking()) {
-                ItemStack handItem = player.getInventory().getItemInMainHand();
-                ItemMeta meta = handItem.getItemMeta();
-                if (meta != null && meta.hasEnchant(customEnchants.SOUL_REAPER)) {
-                    Entity entity = e.getRightClicked();
-                    if (entity instanceof Mob)  {
+        Player player = e.getPlayer();
+        UUID uuid = player.getUniqueId();
+        if (player.isSneaking()) {
+            ItemStack handItem = player.getInventory().getItemInMainHand();
+            ItemMeta meta = handItem.getItemMeta();
+            if (meta != null && meta.hasEnchant(customEnchants.SOUL_REAPER)) {
+                Entity entity = e.getRightClicked();
+                if (entity instanceof Mob)  {
+                    Chunk chunk = entity.getLocation().getChunk();
+                    if (chunkAPI.canBreakInChunk(uuid, chunk)) {
                         if (data.hasPlayerClickDelay(uuid)) return;
                         else pu.addPlayerClickDelay(uuid);
-                        e.setCancelled(true);
 
                         World world = player.getWorld();
                         Location location = entity.getLocation();
                         EntityType type = entity.getType();
 
                         if (!petsAPI.isPet(entity.getUniqueId())) {
+                            e.setCancelled(true);
                             if (!hasEntityKey(handItem)) {
                                 String key = pu.getNBTCompoundData(entity);
                                 setEntityKey(handItem, key, type.name());
@@ -85,9 +86,6 @@ public class SoulReaperListener implements Listener {
                 ItemMeta itemMeta = handItem.getItemMeta();
                 UUID uuid = player.getUniqueId();
                 if (itemMeta != null && itemMeta.hasEnchant(customEnchants.SOUL_REAPER)) {
-                    e.setCancelled(true);
-                    if (data.hasPlayerClickDelay(uuid)) return;
-                    else pu.addPlayerClickDelay(uuid);
                     Block block = player.getTargetBlock(5);
                     World world = player.getWorld();
                     if (block != null && !block.getType().equals(Material.AIR)) {
@@ -95,6 +93,9 @@ public class SoulReaperListener implements Listener {
                         Chunk chunk = location.getChunk();
                         if (chunkAPI.canBreakInChunk(uuid, chunk)) {
                             if (hasEntityKey(handItem)) {
+                                if (data.hasPlayerClickDelay(uuid)) return;
+                                else pu.addPlayerClickDelay(uuid);
+                                e.setCancelled(true);
                                 String key = getEntityKey(handItem);
                                 Vector box = block.getBoundingBox().getCenter();
                                 Location newLoc = box.equals(new Vector(0, 0, 0)) ? block.getLocation() : new Location(world, box.getX(), box.getY() + 0.5, box.getZ());
