@@ -1,6 +1,7 @@
 package lee.code.enchants.listeners.enchants;
 
 import lee.code.chunks.ChunkAPI;
+import lee.code.enchants.Data;
 import lee.code.enchants.GoldmanEnchants;
 import lee.code.enchants.PU;
 import org.bukkit.Chunk;
@@ -25,6 +26,7 @@ public class LoggerListener implements Listener {
     public void onLoggerBlockBreak(BlockBreakEvent e) {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
         PU pu = plugin.getPU();
+        Data data = plugin.getData();
         ChunkAPI chunkAPI = plugin.getChunkAPI();
 
         Player player = e.getPlayer();
@@ -35,7 +37,7 @@ public class LoggerListener implements Listener {
 
         if (itemMeta != null && itemMeta.hasEnchant(plugin.getCustomEnchants().LOGGER)) {
             Block block = e.getBlock();
-            if (pu.getSupportedLogKeys().contains(block.getType().name())) {
+            if (data.getSupportedLoggerBlocks().contains(block.getType().name())) {
                 List<Block> blocks = new ArrayList<>();
                 BlockFace[] faces = new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
                 blocks.add(block);
@@ -54,7 +56,7 @@ public class LoggerListener implements Listener {
 
                                 for (BlockFace face : faces) {
                                     Block block = log.getRelative(face);
-                                    if (pu.getSupportedLogKeys().contains(block.getType().name())) {
+                                    if (data.getSupportedLoggerBlocks().contains(block.getType().name())) {
                                         Chunk chunk = block.getChunk();
                                         if (chunkAPI.canBreakInChunk(uuid, chunk)) {
                                             if (!blocks.contains(block)) blocks.add(block);
@@ -62,7 +64,7 @@ public class LoggerListener implements Listener {
                                     }
                                     for (BlockFace face2 : faces) {
                                         Block block2 = block.getRelative(face2);
-                                        if (pu.getSupportedLogKeys().contains(block2.getType().name())) {
+                                        if (data.getSupportedLoggerBlocks().contains(block2.getType().name())) {
                                             Chunk chunk = block2.getChunk();
                                             if (chunkAPI.canBreakInChunk(uuid, chunk)) {
                                                 if (!blocks.contains(block2)) blocks.add(block2);

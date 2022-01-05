@@ -1,6 +1,7 @@
 package lee.code.enchants.listeners.enchants;
 
 import lee.code.chunks.ChunkAPI;
+import lee.code.enchants.Data;
 import lee.code.enchants.GoldmanEnchants;
 import lee.code.enchants.PU;
 import org.bukkit.Chunk;
@@ -8,7 +9,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.Container;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,7 +33,7 @@ public class DestroyerListener implements Listener {
         ItemMeta itemMeta = handItem.getItemMeta();
         if (itemMeta != null && itemMeta.hasEnchant(plugin.getCustomEnchants().DESTROYER)) {
             Block block = e.getBlock();
-            List<Block> blocks = getBlocks(player.getUniqueId(), block.getRelative(getDirection(player)));
+            List<Block> blocks = getBlocks(player.getUniqueId(), block.getRelative(getDirection(player)), handItem.getType());
             blocks.remove(block);
             if (!blocks.isEmpty()) {
                 for (Block sBlock : blocks) pu.breakBlock(player, sBlock, itemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.hasEnchant(Enchantment.SILK_TOUCH));
@@ -41,8 +41,9 @@ public class DestroyerListener implements Listener {
         }
     }
 
-    private ArrayList<Block> getBlocks(UUID uuid, Block start) {
+    private ArrayList<Block> getBlocks(UUID uuid, Block start, Material handItem) {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
+        Data data = plugin.getData();
         ChunkAPI chunkAPI = plugin.getChunkAPI();
 
         ArrayList<Block> blocks = new ArrayList<>();
@@ -57,8 +58,10 @@ public class DestroyerListener implements Listener {
                     if (chunkAPI.canBreakInChunk(uuid, chunk)) {
                         if (!blocks.contains(block)) {
                             Material type = block.getType();
-                            if (type.isItem() && !type.equals(Material.SPAWNER) && !type.equals(Material.BEDROCK) && !type.equals(Material.AIR) && !type.equals(Material.WATER) && !type.equals(Material.LAVA) && !type.name().contains("SIGN") && !type.name().contains("CARPET") && !type.equals(Material.END_PORTAL) && !type.equals(Material.END_PORTAL_FRAME) && !type.equals(Material.NETHER_PORTAL) && !type.equals(Material.SNOW) && !(block.getState() instanceof Container)) {
-                                blocks.add(block);
+                            if (handItem.name().endsWith("PICKAXE")) {
+                                if (data.getSupportedPickaxeDestroyerBlocks().contains(type.name())) blocks.add(block);
+                            } else if (handItem.name().endsWith("SHOVEL")) {
+                                if (data.getSupportedShovelDestroyerBlocks().contains(type.name())) blocks.add(block);
                             }
                         }
                     }

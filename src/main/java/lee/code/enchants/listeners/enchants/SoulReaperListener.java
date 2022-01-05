@@ -41,7 +41,7 @@ public class SoulReaperListener implements Listener {
                 Entity entity = e.getRightClicked();
                 if (entity instanceof Mob)  {
                     Chunk chunk = entity.getLocation().getChunk();
-                    if (chunkAPI.canBreakInChunk(uuid, chunk)) {
+                    if (chunkAPI.canInteractInChunk(uuid, chunk)) {
                         if (data.hasPlayerClickDelay(uuid)) return;
                         else pu.addPlayerClickDelay(uuid);
 
@@ -91,7 +91,7 @@ public class SoulReaperListener implements Listener {
                     if (block != null && !block.getType().equals(Material.AIR)) {
                         Location location = block.getLocation();
                         Chunk chunk = location.getChunk();
-                        if (chunkAPI.canBreakInChunk(uuid, chunk)) {
+                        if (chunkAPI.canInteractInChunk(uuid, chunk)) {
                             if (hasEntityKey(handItem)) {
                                 if (data.hasPlayerClickDelay(uuid)) return;
                                 else pu.addPlayerClickDelay(uuid);

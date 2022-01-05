@@ -1,6 +1,7 @@
 package lee.code.enchants.listeners;
 
 import lee.code.enchants.CustomEnchants;
+import lee.code.enchants.Data;
 import lee.code.enchants.GoldmanEnchants;
 import lee.code.enchants.PU;
 import org.bukkit.Location;
@@ -18,6 +19,7 @@ public class EnchantListener implements Listener {
     public void onEnchantItem(EnchantItemEvent e) {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
         PU pu = plugin.getPU();
+        Data data = plugin.getData();
 
         if (pu.enchantChanceRNG() > 700) {
             Player player = e.getEnchanter();
@@ -29,7 +31,7 @@ public class EnchantListener implements Listener {
             if (itemMeta != null) {
                 if (level == 30) {
                     int rng = pu.enchantChoiceRNG();
-                    String key = pu.getEnchantKeys().get(rng);
+                    String key = data.getCustomEnchantKeys().get(rng);
                     if (enchants.valueOf(key).canEnchantItem(item)) {
                         item.setItemMeta(pu.applyCustomEnchant(itemMeta, enchants.valueOf(key), 0));
                         player.getWorld().playSound(blockLocation, Sound.ENTITY_ILLUSIONER_PREPARE_BLINDNESS, (float) 1, (float) 1);

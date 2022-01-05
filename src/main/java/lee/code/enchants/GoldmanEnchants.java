@@ -38,6 +38,7 @@ public class GoldmanEnchants extends JavaPlugin {
         registerListeners();
         customEnchants.register();
         registerCommands();
+        data.loadData();
     }
 
     @Override

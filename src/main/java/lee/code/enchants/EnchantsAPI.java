@@ -4,7 +4,7 @@ public class EnchantsAPI {
 
     public boolean isCustomEnchant(String key) {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
-        PU pu = plugin.getPU();
-        return pu.getEnchantKeys().contains(key);
+        Data data = plugin.getData();
+        return data.getCustomEnchantKeys().contains(key);
     }
 }

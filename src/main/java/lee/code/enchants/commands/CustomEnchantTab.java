@@ -21,7 +21,7 @@ public class CustomEnchantTab implements TabCompleter {
 
         if (sender instanceof Player) {
             if (args.length == 1) {
-                return StringUtil.copyPartialMatches(args[0], plugin.getPU().getEnchantKeys(), new ArrayList<>());
+                return StringUtil.copyPartialMatches(args[0], plugin.getData().getCustomEnchantKeys(), new ArrayList<>());
             } else return blank;
         } else return blank;
     }

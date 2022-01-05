@@ -1,5 +1,6 @@
 package lee.code.enchants.commands;
 
+import lee.code.enchants.Data;
 import lee.code.enchants.GoldmanEnchants;
 import lee.code.enchants.PU;
 import lee.code.enchants.lists.Lang;
@@ -17,6 +18,7 @@ public class CustomEnchantCMD implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
         PU pu = plugin.getPU();
+        Data data = plugin.getData();
 
         if (sender instanceof Player player) {
             if (args.length > 0) {
@@ -24,7 +26,7 @@ public class CustomEnchantCMD implements CommandExecutor {
                 ItemStack handItem = player.getInventory().getItemInMainHand();
                 if (handItem.getType() != Material.AIR) {
                     ItemMeta meta = handItem.getItemMeta();
-                    if (pu.getEnchantKeys().contains(enchantName)) {
+                    if (data.getCustomEnchantKeys().contains(enchantName)) {
                         handItem.setItemMeta(pu.applyCustomEnchant(meta, plugin.getCustomEnchants().valueOf(enchantName), 0));
                         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ENCHANT_COMMAND_SUCCESSFUL.getComponent(new String[] { pu.formatCapitalization(enchantName) })));
                     }

@@ -1,6 +1,7 @@
 package lee.code.enchants.listeners;
 
 import lee.code.enchants.CustomEnchants;
+import lee.code.enchants.Data;
 import lee.code.enchants.GoldmanEnchants;
 import lee.code.enchants.PU;
 import lee.code.enchants.lists.Enchants;
@@ -26,6 +27,7 @@ public class AnvilListener implements Listener {
     @EventHandler
     public void onAnvilUse(InventoryClickEvent e) {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
+        Data data = plugin.getData();
 
         Inventory inventory = e.getClickedInventory();
         if (inventory != null) {
@@ -37,7 +39,7 @@ public class AnvilListener implements Listener {
                     if (item != null && !item.getType().equals(Material.AIR)) {
                         ItemMeta itemMeta = item.getItemMeta();
                         List<Component> lore = itemMeta.lore();
-                        List<String> kLore = plugin.getPU().getEnchantKeys();
+                        List<String> kLore = data.getCustomEnchantKeys();
 
                         if (lore != null) {
                             for (String key : kLore) {
@@ -58,6 +60,7 @@ public class AnvilListener implements Listener {
     public void onPrepareAnvilCustomEnchant(PrepareAnvilEvent e) {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
         PU pu = plugin.getPU();
+        Data data = plugin.getData();
 
         ItemStack[] contents = e.getInventory().getContents();
         ItemStack firstSlot = contents[0];
@@ -83,7 +86,7 @@ public class AnvilListener implements Listener {
                         String key = slotTwoEnchantMap.getKey().getKey().getKey();
                         Enchantment enchant2 = slotTwoEnchantMap.getKey();
 
-                        if (!pu.getEnchantKeys().contains(key)) {
+                        if (!data.getCustomEnchantKeys().contains(key)) {
                             int level2 = slotTwoEnchantMap.getValue();
 
                             if (enchant2.canEnchantItem(firstSlot) || firstSlot.getType().equals(Material.ENCHANTED_BOOK)) {
@@ -112,7 +115,7 @@ public class AnvilListener implements Listener {
 
                     for (Enchantment enchant2 : secondItemMeta.getEnchants().keySet()) {
                         String key = enchant2.getKey().getKey().toUpperCase();
-                        if (pu.getEnchantKeys().contains(key)) {
+                        if (data.getCustomEnchantKeys().contains(key)) {
                             Enchantment cEnchant = customEnchants.valueOf(key);
                             if (cEnchant.canEnchantItem(firstSlot)) {
                                 if (!firstItemMeta.hasEnchant(cEnchant)) {

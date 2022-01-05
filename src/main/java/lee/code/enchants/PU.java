@@ -2,7 +2,6 @@ package lee.code.enchants;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import lee.code.enchants.lists.Enchants;
-import lee.code.enchants.lists.SupportedLogs;
 import lee.code.essentials.EssentialsAPI;
 import net.coreprotect.CoreProtectAPI;
 import net.kyori.adventure.text.Component;
@@ -30,11 +29,11 @@ import org.bukkit.scheduler.BukkitTask;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class PU {
 
     private final Random random = new Random();
+    private final DecimalFormat valueFormatter = new DecimalFormat("#,###");
 
     public String format(String format) { return ChatColor.translateAlternateColorCodes('&', format); }
 
@@ -53,20 +52,14 @@ public class PU {
     }
 
     public int enchantChoiceRNG() {
-        return random.nextInt(getEnchantKeys().size());
+        GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
+        Data data = plugin.getData();
+        return random.nextInt(data.getCustomEnchantKeys().size());
     }
 
     public String formatCapitalization(String message) {
         String format = message.toLowerCase().replaceAll("_", " ");
         return WordUtils.capitalize(format);
-    }
-
-    public List<String> getEnchantKeys() {
-        return EnumSet.allOf(Enchants.class).stream().map(Enchants::name).collect(Collectors.toList());
-    }
-
-    public List<String> getSupportedLogKeys() {
-        return EnumSet.allOf(SupportedLogs.class).stream().map(SupportedLogs::name).collect(Collectors.toList());
     }
 
     public void addLightningStrikeDelay(UUID uuid) {
@@ -106,20 +99,11 @@ public class PU {
         else return "&e" + seconds + "&6s";
     }
 
-    public String formatAmount(int value) {
-        DecimalFormat formatter = new DecimalFormat("#,###");
-        return formatter.format(value);
-    }
+    public String formatAmount(int value) { return valueFormatter.format(value); }
 
-    public String formatAmount(double value) {
-        DecimalFormat formatter = new DecimalFormat("#,###");
-        return formatter.format(value);
-    }
+    public String formatAmount(double value) { return valueFormatter.format(value); }
 
-    public String formatAmount(long value) {
-        DecimalFormat formatter = new DecimalFormat("#,###");
-        return formatter.format(value);
-    }
+    public String formatAmount(long value) { return valueFormatter.format(value); }
 
     public void addPlayerClickDelay(UUID uuid) {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();

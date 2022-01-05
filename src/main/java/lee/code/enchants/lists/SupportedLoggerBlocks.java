@@ -5,7 +5,7 @@ import lombok.Getter;
 import org.bukkit.Material;
 
 @AllArgsConstructor
-public enum SupportedLogs {
+public enum SupportedLoggerBlocks {
 
     OAK_LOG(Material.OAK_LOG),
     ACACIA_LOG(Material.ACACIA_LOG),
