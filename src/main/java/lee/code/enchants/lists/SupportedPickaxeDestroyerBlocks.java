@@ -113,6 +113,9 @@ public enum SupportedPickaxeDestroyerBlocks {
     GREEN_CONCRETE(Material.GREEN_CONCRETE),
     RED_CONCRETE(Material.RED_CONCRETE),
     BLACK_CONCRETE(Material.BLACK_CONCRETE),
+    ICE(Material.ICE),
+    PACKED_ICE(Material.PACKED_ICE),
+    BLUE_ICE(Material.BLUE_ICE),
 
     ;
 

@@ -35,6 +35,7 @@ public enum SupportedShovelDestroyerBlocks {
     GREEN_CONCRETE_POWDER(Material.GREEN_CONCRETE_POWDER),
     RED_CONCRETE_POWDER(Material.RED_CONCRETE_POWDER),
     BLACK_CONCRETE_POWDER(Material.BLACK_CONCRETE_POWDER),
+    SNOW_BLOCK(Material.SNOW_BLOCK),
 
     ;
 

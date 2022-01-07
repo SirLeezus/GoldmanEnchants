@@ -74,7 +74,6 @@ public class AnvilListener implements Listener {
             CustomEnchants customEnchants = plugin.getCustomEnchants();
 
             if (EnchantmentTarget.BREAKABLE.includes(secondItemType) || secondItemType.equals(Material.ENCHANTED_BOOK)) {
-
                 if (!firstItemType.equals(Material.BOOK)) {
                     ItemStack dupe = firstSlot.clone();
                     ItemMeta dupeMeta = dupe.getItemMeta();
@@ -82,15 +81,13 @@ public class AnvilListener implements Listener {
                     Map<Enchantment, Integer> enchants2 = secondItemMeta instanceof EnchantmentStorageMeta bookSlot2 ? bookSlot2.getStoredEnchants() : secondItemMeta.getEnchants();
 
                     for (Map.Entry<Enchantment, Integer> slotTwoEnchantMap : enchants2.entrySet()) {
-
                         String key = slotTwoEnchantMap.getKey().getKey().getKey();
                         Enchantment enchant2 = slotTwoEnchantMap.getKey();
 
                         if (!data.getCustomEnchantKeys().contains(key)) {
                             int level2 = slotTwoEnchantMap.getValue();
 
-                            if (enchant2.canEnchantItem(firstSlot) || firstSlot.getType().equals(Material.ENCHANTED_BOOK)) {
-
+                            if (enchant2.canEnchantItem(firstSlot) || firstSlot.getType().equals(Material.ENCHANTED_BOOK) || (firstSlot.getType().equals(Material.STICK) && enchant2.equals(Enchantment.KNOCKBACK))) {
                                 if (firstItemMeta instanceof EnchantmentStorageMeta bookSlot1) {
                                     if (bookSlot1.hasStoredEnchant(enchant2)) {
                                         int level1 = bookSlot1.getStoredEnchantLevel(enchant2);
