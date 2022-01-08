@@ -83,11 +83,12 @@ public class AnvilListener implements Listener {
                     for (Map.Entry<Enchantment, Integer> slotTwoEnchantMap : enchants2.entrySet()) {
                         String key = slotTwoEnchantMap.getKey().getKey().getKey();
                         Enchantment enchant2 = slotTwoEnchantMap.getKey();
+                        boolean isValidStick = firstSlot.getType().equals(Material.STICK) && enchant2.equals(Enchantment.KNOCKBACK) && firstSlot.getAmount() == 1;
 
                         if (!data.getCustomEnchantKeys().contains(key)) {
                             int level2 = slotTwoEnchantMap.getValue();
 
-                            if (enchant2.canEnchantItem(firstSlot) || firstSlot.getType().equals(Material.ENCHANTED_BOOK) || (firstSlot.getType().equals(Material.STICK) && enchant2.equals(Enchantment.KNOCKBACK))) {
+                            if (enchant2.canEnchantItem(firstSlot) || firstSlot.getType().equals(Material.ENCHANTED_BOOK) || isValidStick) {
                                 if (firstItemMeta instanceof EnchantmentStorageMeta bookSlot1) {
                                     if (bookSlot1.hasStoredEnchant(enchant2)) {
                                         int level1 = bookSlot1.getStoredEnchantLevel(enchant2);
