@@ -5,6 +5,7 @@ import lee.code.enchants.GoldmanEnchants;
 import org.bukkit.Chunk;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
@@ -20,9 +21,9 @@ public class SoulBoundListener implements Listener {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
         ChunkAPI chunkAPI = plugin.getChunkAPI();
 
-        Player player = e.getEntity();
+        Player player = e.getPlayer();
         Chunk chunk = player.getLocation().getChunk();
-        if (!chunkAPI.isClaimed(chunk) || !chunkAPI.isAdminChunk(chunk)) {
+        if (!chunkAPI.isClaimed(chunk) && !chunkAPI.isAdminChunk(chunk)) {
             List<ItemStack> keepItems = new ArrayList<>();
             List<ItemStack> dropItems = new ArrayList<>();
 
