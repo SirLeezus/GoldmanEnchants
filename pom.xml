@@ -50,6 +50,29 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.3.0-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/**</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
         <finalName>${project.artifactId}-${project.version}</finalName>
         <sourceDirectory>src/main/java</sourceDirectory>
@@ -103,6 +126,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.22</version>
+            <scope>provided</scope>
         </dependency>
         <!-- GoldmanChunks API -->
         <dependency>
@@ -122,6 +146,13 @@
         <dependency>
             <groupId>lee.code.enchants</groupId>
             <artifactId>enchants-api</artifactId>
+            <version>1.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- GoldmanEssentials API -->
+        <dependency>
+            <groupId>lee.code.essentials</groupId>
+            <artifactId>essentials-api</artifactId>
             <version>1.0.0</version>
             <scope>provided</scope>
         </dependency>
