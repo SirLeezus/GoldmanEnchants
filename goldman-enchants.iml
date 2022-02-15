@@ -5,8 +5,8 @@
       <configuration>
         <autoDetectTypes>
           <platformType>ADVENTURE</platformType>
-          <platformType>SPIGOT</platformType>
           <platformType>MCP</platformType>
+          <platformType>SPIGOT</platformType>
         </autoDetectTypes>
       </configuration>
     </facet>
