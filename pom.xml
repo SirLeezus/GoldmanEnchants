@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
-    <artifactId>GoldmanEnchants</artifactId>
+    <groupId>lee.code.enchants</groupId>
+    <artifactId>goldman-enchants</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
@@ -102,37 +102,34 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.20</version>
+            <version>1.18.22</version>
         </dependency>
         <!-- GoldmanChunks API -->
         <dependency>
             <groupId>lee.code.chunks</groupId>
-            <artifactId>chunk-api</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>C:\Users\Lee\Documents\APIs\ChunkAPI.jar</systemPath>
+            <artifactId>chunks-api</artifactId>
+            <version>1.0.0</version>
+            <scope>provided</scope>
         </dependency>
         <!-- GoldmanPets API -->
         <dependency>
             <groupId>lee.code.pets</groupId>
             <artifactId>pets-api</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>C:\Users\Lee\Documents\APIs\PetsAPI.jar</systemPath>
+            <version>1.0.0</version>
+            <scope>provided</scope>
         </dependency>
-        <!-- GoldmanEssentials API -->
+        <!-- GoldmanEnchants API -->
         <dependency>
-            <groupId>lee.code.essentials</groupId>
-            <artifactId>essentials-api</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>C:\Users\Lee\Documents\APIs\EssentailsAPI.jar</systemPath>
+            <groupId>lee.code.enchants</groupId>
+            <artifactId>enchants-api</artifactId>
+            <version>1.0.0</version>
+            <scope>provided</scope>
         </dependency>
         <!-- CoreProtect API -->
         <dependency>
             <groupId>net.coreprotect</groupId>
             <artifactId>coreprotect</artifactId>
-            <version>20.0</version>
+            <version>20.4</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
