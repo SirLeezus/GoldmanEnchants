@@ -8,20 +8,21 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import net.minecraft.nbt.MojangsonParser;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.TagParser;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -114,8 +115,10 @@ public class PU {
     }
 
     public ItemMeta applyCustomEnchant(ItemMeta itemMeta, Enchantment enchantment, int level) {
-        itemMeta.addEnchant(enchantment, level, false);
-        Component enchantLore = Enchants.valueOf(enchantment.getKey().getKey().toUpperCase()).getLore(null);
+        if (level > enchantment.getMaxLevel()) level = enchantment.getMaxLevel();
+        if (itemMeta instanceof EnchantmentStorageMeta bookMeta) bookMeta.addStoredEnchant(enchantment, level, false);
+        else itemMeta.addEnchant(enchantment, level, false);
+        Component enchantLore = Enchants.valueOf(enchantment.getKey().getKey().toUpperCase()).getLore(enchantment, level);
         List<Component> lore = itemMeta.lore();
         if (lore != null) {
             lore.add(enchantLore);
@@ -124,6 +127,26 @@ public class PU {
             itemMeta.lore(Collections.singletonList(enchantLore));
         }
         return itemMeta;
+    }
+
+    public String getRomanNumber(int number) {
+        switch (number) {
+            case 1 -> { return "I"; }
+            case 2 -> { return "II"; }
+            case 3 -> { return "III"; }
+            case 4 -> { return "IV"; }
+            case 5 -> { return "V"; }
+            case 6 -> { return "VI"; }
+            case 7 -> { return "VII"; }
+            case 8 -> { return "VIII"; }
+            case 9 -> { return "IX"; }
+            case 10 -> { return "X"; }
+            default -> { return String.valueOf(number); }
+        }
+    }
+
+    public boolean containOnlyNumbers(String string) {
+        return string.matches("-?[1-9]\\d*|0");
     }
 
     public void breakBlock(Player player, Block block, boolean fortune, int fortuneLevel, boolean silkTouch) {
@@ -171,8 +194,8 @@ public class PU {
 
     public String getNBTCompoundData(Entity entity) {
         net.minecraft.world.entity.Entity nmsEntity = ((CraftEntity) entity).getHandle(); //Converting our Entity to NMS
-        NBTTagCompound nbtTagCompound = new NBTTagCompound();
-        nmsEntity.f(nbtTagCompound); // f = save
+        CompoundTag nbtTagCompound = new CompoundTag();
+        nmsEntity.save(nbtTagCompound); // f = save
         return nbtTagCompound.toString();
     }
 
@@ -180,9 +203,7 @@ public class PU {
         Entity entity = location.getWorld().spawnEntity(location, type);
         net.minecraft.world.entity.Entity nmsEntity = ((CraftEntity) entity).getHandle();
         try {
-            //g = load
-            //a = parse
-            nmsEntity.g(MojangsonParser.a(nbtTagCompound));
+            nmsEntity.load(TagParser.parseTag(nbtTagCompound));
         } catch (CommandSyntaxException ex) {
             ex.printStackTrace();
         }

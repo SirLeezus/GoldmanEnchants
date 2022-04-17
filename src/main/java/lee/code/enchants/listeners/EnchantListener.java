@@ -33,7 +33,7 @@ public class EnchantListener implements Listener {
                     int rng = pu.enchantChoiceRNG();
                     String key = data.getCustomEnchantKeys().get(rng);
                     if (enchants.valueOf(key).canEnchantItem(item)) {
-                        item.setItemMeta(pu.applyCustomEnchant(itemMeta, enchants.valueOf(key), 0));
+                        item.setItemMeta(pu.applyCustomEnchant(itemMeta, enchants.valueOf(key), 1));
                         player.getWorld().playSound(blockLocation, Sound.ENTITY_ILLUSIONER_PREPARE_BLINDNESS, (float) 1, (float) 1);
                     }
                 }

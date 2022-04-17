@@ -24,10 +24,15 @@ public class CustomEnchantCMD implements CommandExecutor {
             if (args.length > 0) {
                 String enchantName = args[0].toUpperCase();
                 ItemStack handItem = player.getInventory().getItemInMainHand();
+                int level = 1;
+                if (args.length > 1) {
+                    String sLevel = args[1];
+                    if (pu.containOnlyNumbers(sLevel)) level = Integer.parseInt(sLevel);
+                }
                 if (handItem.getType() != Material.AIR) {
                     ItemMeta meta = handItem.getItemMeta();
                     if (data.getCustomEnchantKeys().contains(enchantName)) {
-                        handItem.setItemMeta(pu.applyCustomEnchant(meta, plugin.getCustomEnchants().valueOf(enchantName), 0));
+                        handItem.setItemMeta(pu.applyCustomEnchant(meta, plugin.getCustomEnchants().valueOf(enchantName), level));
                         player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ENCHANT_COMMAND_SUCCESSFUL.getComponent(new String[] { pu.formatCapitalization(enchantName) })));
                     }
                 }

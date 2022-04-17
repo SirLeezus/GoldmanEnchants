@@ -5,26 +5,29 @@ import lee.code.enchants.PU;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
+import org.bukkit.enchantments.Enchantment;
 
 @AllArgsConstructor
 public enum Enchants {
 
-    LOGGER("&#964B00Logger"),
-    DESTROYER("&#DE0000Destroyer"),
-    LIGHTNING_STRIKE("&#FCFF35Lightning Strike"),
-    SOUL_BOUND("&#6A00E1Soul Bound"),
-    SOUL_REAPER("&#FF00E4Soul Reaper"),
-    AUTO_SELL("&#FF9709Auto Sell"),
+    LOGGER("Logger", "&#964B00"),
+    DESTROYER("Destroyer", "&#DE0000"),
+    LIGHTNING_STRIKE("Lightning Strike", "&#FCFF35"),
+    SOUL_BOUND("Soul Bound", "&#6A00E1"),
+    SOUL_REAPER("Soul Reaper", "&#FF00E4"),
+    AUTO_SELL("Auto Sell", "&#FF9709"),
+    LIFE_STEAL("Life Steal", "&#FF1700"),
+    MOLTEN_SHOT("Molten Shot", "&#CF6010"),
     ;
 
     @Getter private final String lore;
+    @Getter private final String color;
 
-    public Component getLore(String[] variables) {
+    public Component getLore(Enchantment enchantment, int level) {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
         PU pu = plugin.getPU();
-        String value = lore;
-        if (variables == null || variables.length == 0) return pu.formatC(value);
-        for (int i = 0; i < variables.length; i++) value = value.replace("{" + i + "}", variables[i]);
+        String value = color + lore;
+        if (enchantment != null && enchantment.getMaxLevel() > 0) value = value + " " + pu.getRomanNumber(level);
         return pu.formatC(value);
     }
 }
