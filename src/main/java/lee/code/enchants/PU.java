@@ -114,13 +114,39 @@ public class PU {
         scheduler.runTaskLater(plugin, () -> data.removePlayerClickDelay(uuid), 5);
     }
 
+    private void removeCustomEnchantLore(List<Component> lore, Enchantment enchantment) {
+        if (!lore.isEmpty()) {
+            Iterator<Component> itr = lore.iterator();
+            String enchantName = formatCapitalization(enchantment.getKey().getKey());
+            while (itr.hasNext()) {
+                if (unFormatC(itr.next()).contains(enchantName)) {
+                    itr.remove();
+                }
+            }
+        }
+    }
+
     public ItemMeta applyCustomEnchant(ItemMeta itemMeta, Enchantment enchantment, int level) {
+        List<Component> lore = new ArrayList<>();
+        String enchantKey = enchantment.getKey().getKey().toUpperCase();
+        if (itemMeta.lore() != null) lore.addAll(Objects.requireNonNull(itemMeta.lore()));
+
+        if (!lore.isEmpty()) {
+            if (itemMeta instanceof EnchantmentStorageMeta bookMeta) {
+                if (bookMeta.hasStoredEnchant(enchantment)) {
+                    removeCustomEnchantLore(lore, enchantment);
+                }
+            } else if (itemMeta.hasEnchant(enchantment)) {
+                removeCustomEnchantLore(lore, enchantment);
+            }
+        }
+
         if (level > enchantment.getMaxLevel()) level = enchantment.getMaxLevel();
         if (itemMeta instanceof EnchantmentStorageMeta bookMeta) bookMeta.addStoredEnchant(enchantment, level, false);
         else itemMeta.addEnchant(enchantment, level, false);
-        Component enchantLore = Enchants.valueOf(enchantment.getKey().getKey().toUpperCase()).getLore(enchantment, level);
-        List<Component> lore = itemMeta.lore();
-        if (lore != null) {
+        Component enchantLore = Enchants.valueOf(enchantKey).getLore(enchantment, level);
+
+        if (!lore.isEmpty()) {
             lore.add(enchantLore);
             itemMeta.lore(lore);
         } else {

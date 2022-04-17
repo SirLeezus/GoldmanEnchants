@@ -5,6 +5,7 @@ import lee.code.enchants.Data;
 import lee.code.enchants.GoldmanEnchants;
 import lee.code.enchants.PU;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,7 +34,15 @@ public class EnchantListener implements Listener {
                     int rng = pu.enchantChoiceRNG();
                     String key = data.getCustomEnchantKeys().get(rng);
                     if (enchants.valueOf(key).canEnchantItem(item)) {
-                        item.setItemMeta(pu.applyCustomEnchant(itemMeta, enchants.valueOf(key), 1));
+                        if (item.getType().equals(Material.BOOK)) {
+                            ItemStack newBook = new ItemStack(Material.ENCHANTED_BOOK);
+                            ItemMeta newBookMeta = newBook.getItemMeta();
+                            newBook.setItemMeta(pu.applyCustomEnchant(newBookMeta, enchants.valueOf(key), 1));
+                            item.setType(newBook.getType());
+                            item.setItemMeta(newBookMeta);
+                        } else {
+                            item.setItemMeta(pu.applyCustomEnchant(itemMeta, enchants.valueOf(key), 1));
+                        }
                         player.getWorld().playSound(blockLocation, Sound.ENTITY_ILLUSIONER_PREPARE_BLINDNESS, (float) 1, (float) 1);
                     }
                 }

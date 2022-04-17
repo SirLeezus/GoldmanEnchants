@@ -37,7 +37,6 @@ public class AnvilListener implements Listener {
                 if (!firstItemType.equals(Material.BOOK)) {
                     ItemStack result = firstSlot.clone();
                     ItemMeta resultMeta = result.getItemMeta();
-                    resultMeta.lore(null);
 
                     Map<Enchantment, Integer> enchants2 = secondItemMeta instanceof EnchantmentStorageMeta bookSlot2 ? bookSlot2.getStoredEnchants() : secondItemMeta.getEnchants();
 
@@ -53,14 +52,6 @@ public class AnvilListener implements Listener {
                                     int level1 = bookSlot1.getStoredEnchantLevel(enchant2);
                                     if (level1 > level2) level2 = level1;
                                     else if (level1 == level2) level2 = level1 + 1;
-                                } else {
-                                    //patch for old version that had normal enchants on enchanted books
-                                    //TODO remove later
-                                    if (firstItemMeta.hasEnchant(enchant2)) {
-                                        int level1 = firstItemMeta.getEnchantLevel(enchant2);
-                                        if (level1 > level2) level2 = level1;
-                                        else if (level1 == level2) level2 = level1 + 1;
-                                    }
                                 }
                             } else {
                                 if (firstItemMeta.hasEnchant(enchant2)) {
