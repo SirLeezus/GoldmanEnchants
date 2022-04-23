@@ -22,7 +22,7 @@ public class EnchantListener implements Listener {
         PU pu = plugin.getPU();
         Data data = plugin.getData();
 
-        if (pu.enchantChanceRNG() > 700) {
+        if (pu.enchantChanceRNG() > 900) {
             Player player = e.getEnchanter();
             Location blockLocation = e.getEnchantBlock().getLocation();
             int level = e.getExpLevelCost();

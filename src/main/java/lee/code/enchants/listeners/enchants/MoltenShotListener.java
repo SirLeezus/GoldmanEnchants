@@ -30,8 +30,18 @@ public class MoltenShotListener implements Listener {
                     Location loc = eye.add(eye.getDirection().multiply(1.2));
                     Fireball fireball = (Fireball) loc.getWorld().spawnEntity(loc, EntityType.FIREBALL);
                     fireball.setVelocity(loc.getDirection().normalize().multiply(2));
-                    fireball.setYield(bowMeta.getEnchantLevel(customEnchants.MOLTEN_SHOT));
+
+                    int enchantLevel = bowMeta.getEnchantLevel(customEnchants.MOLTEN_SHOT);
+
+                    double enchantYield = switch (enchantLevel) {
+                        case 1 -> 1;
+                        case 2 -> 1.3;
+                        default -> 1.5;
+                    };
+
+                    fireball.setYield((float) enchantYield);
                     fireball.setShooter(player);
+                    fireball.setIsIncendiary(false);
                     player.getWorld().playSound(player, Sound.ENTITY_GHAST_SHOOT, (float) 0.5, (float) 0.5);
                 }
             }
