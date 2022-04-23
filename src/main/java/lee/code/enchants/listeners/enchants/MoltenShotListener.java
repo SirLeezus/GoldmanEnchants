@@ -9,6 +9,7 @@ import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -35,8 +36,8 @@ public class MoltenShotListener implements Listener {
 
                     double enchantYield = switch (enchantLevel) {
                         case 1 -> 1;
-                        case 2 -> 1.3;
-                        default -> 1.5;
+                        case 2 -> 1.7;
+                        default -> 2;
                     };
 
                     fireball.setYield((float) enchantYield);
@@ -44,6 +45,15 @@ public class MoltenShotListener implements Listener {
                     fireball.setIsIncendiary(false);
                     player.getWorld().playSound(player, Sound.ENTITY_GHAST_SHOOT, (float) 0.5, (float) 0.5);
                 }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onFireballExplode(EntityExplodeEvent e) {
+        if (e.getEntity() instanceof Fireball fireball) {
+            if (fireball.getShooter() instanceof Player) {
+                e.blockList().clear();
             }
         }
     }
