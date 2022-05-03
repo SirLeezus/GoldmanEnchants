@@ -10,7 +10,3 @@ commands:
     permission: enchants.command.enchant
     aliases: [cenchant]
     usage: "/customenchants &f<enchantment>"
-  fixenchant:
-    description: Used to remove custom lore.
-    permission: enchants.command.fixenchant
-    usage: "/fixenchant"

@@ -17,7 +17,6 @@ public enum PickaxeSmeltingBlocks {
     DEEPSLATE_COPPER_ORE(Material.DEEPSLATE_COPPER_ORE, Material.COPPER_INGOT),
     GOLD_ORE(Material.GOLD_ORE, Material.GOLD_INGOT),
     DEEPSLATE_GOLD_ORE(Material.DEEPSLATE_GOLD_ORE, Material.GOLD_INGOT),
-    NETHER_GOLD_ORE(Material.NETHER_GOLD_ORE, Material.GOLD_INGOT),
     ANCIENT_DEBRIS(Material.ANCIENT_DEBRIS, Material.NETHERITE_SCRAP),
 
     ;
