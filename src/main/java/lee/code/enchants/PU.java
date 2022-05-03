@@ -1,7 +1,10 @@
 package lee.code.enchants;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import lee.code.enchants.lists.AxeSmeltingBlocks;
 import lee.code.enchants.lists.Enchants;
+import lee.code.enchants.lists.PickaxeSmeltingBlocks;
+import lee.code.enchants.lists.ShovelSmeltingBlocks;
 import lee.code.essentials.EssentialsAPI;
 import net.coreprotect.CoreProtectAPI;
 import net.kyori.adventure.text.Component;
@@ -11,10 +14,7 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import org.apache.commons.lang.WordUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 import org.bukkit.enchantments.Enchantment;
@@ -175,44 +175,43 @@ public class PU {
         return string.matches("-?[1-9]\\d*|0");
     }
 
-    public void breakBlock(Player player, Block block, boolean fortune, int fortuneLevel, boolean silkTouch) {
+    public void breakBlock(Player player, Block block, boolean fortune, int fortuneLevel, boolean silkTouch, boolean smelting) {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
         EssentialsAPI essentialsAPI = plugin.getEssentialsAPI();
+        Data data = plugin.getData();
         CoreProtectAPI cp = plugin.getCoreProtectAPI();
 
-        cp.logRemoval(player.getName(), block.getLocation(), block.getType(), block.getBlockData());
+        ItemStack handItem = player.getInventory().getItemInMainHand();
+        Material handType = handItem.getType();
+        Material blockType = block.getType();
+        cp.logRemoval(player.getName(), block.getLocation(), blockType, block.getBlockData());
         int booster = essentialsAPI.isBoosterActive() ? essentialsAPI.getBoosterMultiplier() : 0;
-        if (silkTouch) {
-            ItemStack item = new ItemStack(block.getType());
-            block.setType(Material.AIR);
-            if (!item.getType().equals(Material.AIR)) block.getWorld().dropItemNaturally(block.getLocation(), item);
-            return;
 
-        } else if (fortune && block.getType().name().contains("ORE") && block.getType().name().contains("CLUSTER")) {
-            List<ItemStack> drops = new ArrayList<>(block.getDrops());
-            if (!drops.isEmpty()) {
-                int amount = getDropCount(fortuneLevel, new Random()) * booster;
-                ItemStack item = new ItemStack(drops.get(0));
-                item.setAmount(amount);
-                block.setType(Material.AIR);
-                block.getWorld().dropItemNaturally(block.getLocation(), item);
-                return;
-            }
-        }
-        if (booster > 0) {
-            List<ItemStack> drops = new ArrayList<>();
-            if (!block.getDrops().isEmpty()) {
-                for (ItemStack item : new ArrayList<>(block.getDrops())) {
-                    item.setAmount(item.getAmount() * booster);
-                    drops.add(item);
-                }
-            }
-            for (ItemStack item : drops) block.getWorld().dropItemNaturally(block.getLocation(), item);
+        if (silkTouch && !smelting) {
+            ItemStack item = new ItemStack(blockType);
+            block.getWorld().dropItemNaturally(block.getLocation(), item);
             block.setType(Material.AIR);
-        } else block.breakNaturally();
+
+        } else {
+            List<ItemStack> drops = new ArrayList<>(block.getDrops());
+            ItemStack item = new ItemStack(blockType);
+            int amount = 1;
+            if (!drops.isEmpty()) item = new ItemStack(drops.get(0).getType());
+            if (fortune && blockType.name().contains("ORE")) amount = booster > 0 ? getDropCount(fortuneLevel) * booster : getDropCount(fortuneLevel);
+            if (smelting) {
+                Material resultMat = item.getType();
+                if (data.getSupportedPickaxeSmeltingBlocks().contains(blockType.name()) && handType.name().endsWith("PICKAXE")) resultMat = PickaxeSmeltingBlocks.valueOf(blockType.name()).getResult();
+                else if (data.getSupportedShovelSmeltingBlocks().contains(blockType.name()) && handType.name().endsWith("SHOVEL")) resultMat = ShovelSmeltingBlocks.valueOf(blockType.name()).getResult();
+                else if (data.getSupportedAxeSmeltingBlocks().contains(blockType.name()) && handType.name().endsWith("AXE")) resultMat = AxeSmeltingBlocks.valueOf(blockType.name()).getResult();
+                item = new ItemStack(resultMat);
+            }
+            item.setAmount(Math.min(amount, item.getMaxStackSize()));
+            block.getWorld().dropItemNaturally(block.getLocation(), item);
+            block.setType(Material.AIR);
+        }
     }
 
-    private int getDropCount(int level, Random random) {
+    private int getDropCount(int level) {
         int j = random.nextInt(level + 2) - 1;
         if (j < 0) j = 0;
         return (j + 1);

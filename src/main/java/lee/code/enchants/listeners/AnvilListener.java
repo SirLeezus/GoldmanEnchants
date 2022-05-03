@@ -3,6 +3,7 @@ package lee.code.enchants.listeners;
 import lee.code.enchants.Data;
 import lee.code.enchants.GoldmanEnchants;
 import lee.code.enchants.PU;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
@@ -12,7 +13,6 @@ import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-
 import java.util.Map;
 
 public class AnvilListener implements Listener {
@@ -75,7 +75,7 @@ public class AnvilListener implements Listener {
 
                     if (!result.equals(firstSlot)) {
                         e.setResult(result);
-                        if (e.getInventory().getRepairCost() == 0) plugin.getServer().getScheduler().runTask(plugin, () -> e.getInventory().setRepairCost(3));
+                        if (e.getInventory().getRepairCostAmount() == 0) Bukkit.getServer().getScheduler().runTaskLater(plugin, () -> e.getInventory().setRepairCost(3), 1L);
                     } else e.setResult(null);
                 } else e.setResult(null);
             }

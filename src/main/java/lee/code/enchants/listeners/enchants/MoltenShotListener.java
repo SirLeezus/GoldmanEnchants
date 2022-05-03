@@ -26,10 +26,10 @@ public class MoltenShotListener implements Listener {
             if (bow != null) {
                 ItemMeta bowMeta = bow.getItemMeta();
                 if (bowMeta.hasEnchant(customEnchants.MOLTEN_SHOT)) {
-                    e.setCancelled(true);
                     Location eye = player.getEyeLocation();
                     Location loc = eye.add(eye.getDirection().multiply(1.2));
                     Fireball fireball = (Fireball) loc.getWorld().spawnEntity(loc, EntityType.FIREBALL);
+                    e.setProjectile(fireball);
                     fireball.setVelocity(loc.getDirection().normalize().multiply(2));
 
                     int enchantLevel = bowMeta.getEnchantLevel(customEnchants.MOLTEN_SHOT);

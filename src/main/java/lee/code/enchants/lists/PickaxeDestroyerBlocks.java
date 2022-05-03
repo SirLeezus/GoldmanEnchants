@@ -5,7 +5,7 @@ import lombok.Getter;
 import org.bukkit.Material;
 
 @AllArgsConstructor
-public enum SupportedPickaxeDestroyerBlocks {
+public enum PickaxeDestroyerBlocks {
 
     STONE(Material.STONE),
     COBBLESTONE(Material.COBBLESTONE),

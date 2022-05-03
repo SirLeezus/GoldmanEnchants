@@ -27,16 +27,22 @@ public class DestroyerListener implements Listener {
     public void onDestroyerBlockBreak(BlockBreakEvent e) {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
         PU pu = plugin.getPU();
+        Data data = plugin.getData();
 
         Player player = e.getPlayer();
         ItemStack handItem = player.getInventory().getItemInMainHand();
         ItemMeta itemMeta = handItem.getItemMeta();
         if (itemMeta != null && itemMeta.hasEnchant(plugin.getCustomEnchants().DESTROYER)) {
             Block block = e.getBlock();
-            List<Block> blocks = getBlocks(player.getUniqueId(), block.getRelative(getDirection(player)), handItem.getType());
-            blocks.remove(block);
-            if (!blocks.isEmpty()) {
-                for (Block sBlock : blocks) pu.breakBlock(player, sBlock, itemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.hasEnchant(Enchantment.SILK_TOUCH));
+            if (data.getSupportedPickaxeDestroyerBlocks().contains(block.getType().name()) && handItem.getType().name().endsWith("PICKAXE")) {
+                e.setCancelled(true);
+                List<Block> blocks = getBlocks(player.getUniqueId(), block.getRelative(getDirection(player)), handItem.getType());
+                for (Block sBlock : blocks) pu.breakBlock(player, sBlock, itemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.hasEnchant(Enchantment.SILK_TOUCH), itemMeta.hasEnchant(plugin.getCustomEnchants().SMELTING));
+
+            } else if (data.getSupportedShovelDestroyerBlocks().contains(block.getType().name()) && handItem.getType().name().endsWith("SHOVEL")) {
+                e.setCancelled(true);
+                List<Block> blocks = getBlocks(player.getUniqueId(), block.getRelative(getDirection(player)), handItem.getType());
+                for (Block sBlock : blocks) pu.breakBlock(player, sBlock, itemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.hasEnchant(Enchantment.SILK_TOUCH), itemMeta.hasEnchant(plugin.getCustomEnchants().SMELTING));
             }
         }
     }

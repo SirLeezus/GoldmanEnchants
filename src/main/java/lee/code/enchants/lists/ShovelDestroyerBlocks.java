@@ -5,7 +5,7 @@ import lombok.Getter;
 import org.bukkit.Material;
 
 @AllArgsConstructor
-public enum SupportedShovelDestroyerBlocks {
+public enum ShovelDestroyerBlocks {
 
     GRASS_BLOCK(Material.GRASS_BLOCK),
     DIRT(Material.DIRT),

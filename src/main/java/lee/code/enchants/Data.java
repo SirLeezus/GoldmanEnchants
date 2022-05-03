@@ -1,9 +1,6 @@
 package lee.code.enchants;
 
-import lee.code.enchants.lists.Enchants;
-import lee.code.enchants.lists.SupportedLoggerBlocks;
-import lee.code.enchants.lists.SupportedPickaxeDestroyerBlocks;
-import lee.code.enchants.lists.SupportedShovelDestroyerBlocks;
+import lee.code.enchants.lists.*;
 import lombok.Getter;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -12,7 +9,6 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 public class Data {
 
@@ -21,6 +17,9 @@ public class Data {
     @Getter private final List<String> supportedLoggerBlocks = new ArrayList<>();
     @Getter private final List<String> supportedPickaxeDestroyerBlocks = new ArrayList<>();
     @Getter private final List<String> supportedShovelDestroyerBlocks = new ArrayList<>();
+    @Getter private final List<String> supportedPickaxeSmeltingBlocks = new ArrayList<>();
+    @Getter private final List<String> supportedShovelSmeltingBlocks = new ArrayList<>();
+    @Getter private final List<String> supportedAxeSmeltingBlocks = new ArrayList<>();
 
     private final ConcurrentHashMap<UUID, BukkitTask> lightningStrikeTask = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<UUID, Long> lightningStrikeTimer = new ConcurrentHashMap<>();
@@ -56,15 +55,24 @@ public class Data {
 
     public void loadData() {
         //enchant keys
-        customEnchantKeys.addAll(EnumSet.allOf(Enchants.class).stream().map(Enchants::name).collect(Collectors.toList()));
+        customEnchantKeys.addAll(EnumSet.allOf(Enchants.class).stream().map(Enchants::name).toList());
 
         //supported logger enchant block keys
-        supportedLoggerBlocks.addAll(EnumSet.allOf(SupportedLoggerBlocks.class).stream().map(SupportedLoggerBlocks::name).collect(Collectors.toList()));
+        supportedLoggerBlocks.addAll(EnumSet.allOf(LoggerBlocks.class).stream().map(LoggerBlocks::name).toList());
 
         //supported destroyer pickaxe block keys
-        supportedPickaxeDestroyerBlocks.addAll(EnumSet.allOf(SupportedPickaxeDestroyerBlocks.class).stream().map(SupportedPickaxeDestroyerBlocks::name).collect(Collectors.toList()));
+        supportedPickaxeDestroyerBlocks.addAll(EnumSet.allOf(PickaxeDestroyerBlocks.class).stream().map(PickaxeDestroyerBlocks::name).toList());
 
         //supported destroyer shovel block keys
-        supportedShovelDestroyerBlocks.addAll(EnumSet.allOf(SupportedShovelDestroyerBlocks.class).stream().map(SupportedShovelDestroyerBlocks::name).collect(Collectors.toList()));
+        supportedShovelDestroyerBlocks.addAll(EnumSet.allOf(ShovelDestroyerBlocks.class).stream().map(ShovelDestroyerBlocks::name).toList());
+
+        //supported smelting pickaxe block keys
+        supportedPickaxeSmeltingBlocks.addAll(EnumSet.allOf(PickaxeSmeltingBlocks.class).stream().map(PickaxeSmeltingBlocks::name).toList());
+
+        //supported shovel block keys
+        supportedShovelSmeltingBlocks.addAll(EnumSet.allOf(ShovelSmeltingBlocks.class).stream().map(ShovelSmeltingBlocks::name).toList());
+
+        //supported axe block keys
+        supportedAxeSmeltingBlocks.addAll(EnumSet.allOf(AxeSmeltingBlocks.class).stream().map(AxeSmeltingBlocks::name).toList());
     }
 }

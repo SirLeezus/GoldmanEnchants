@@ -18,6 +18,7 @@ public enum Enchants {
     AUTO_SELL("Auto Sell", "&#FF9709"),
     LIFE_STEAL("Life Steal", "&#FF1700"),
     MOLTEN_SHOT("Molten Shot", "&#CF6010"),
+    SMELTING("Smelting", "&#FFBF00"),
     ;
 
     @Getter private final String lore;

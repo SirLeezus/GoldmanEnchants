@@ -1,6 +1,7 @@
 package lee.code.enchants.listeners.enchants;
 
 import lee.code.chunks.ChunkAPI;
+import lee.code.enchants.CustomEnchants;
 import lee.code.enchants.Data;
 import lee.code.enchants.GoldmanEnchants;
 import lee.code.enchants.PU;
@@ -28,19 +29,22 @@ public class LoggerListener implements Listener {
         PU pu = plugin.getPU();
         Data data = plugin.getData();
         ChunkAPI chunkAPI = plugin.getChunkAPI();
+        CustomEnchants customEnchants = plugin.getCustomEnchants();
 
         Player player = e.getPlayer();
         UUID uuid = player.getUniqueId();
 
         ItemStack handItem = player.getInventory().getItemInMainHand();
-        ItemMeta itemMeta = handItem.getItemMeta();
+        ItemMeta handItemMeta = handItem.getItemMeta();
 
-        if (itemMeta != null && itemMeta.hasEnchant(plugin.getCustomEnchants().LOGGER)) {
+        if (handItemMeta != null && handItemMeta.hasEnchant(customEnchants.LOGGER)) {
             Block block = e.getBlock();
             if (data.getSupportedLoggerBlocks().contains(block.getType().name())) {
+                e.setCancelled(true);
                 List<Block> blocks = new ArrayList<>();
                 BlockFace[] faces = new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
                 blocks.add(block);
+                boolean smelting = handItemMeta.hasEnchant(customEnchants.SMELTING);
 
                 new BukkitRunnable() {
                     final int maxLogs = 150;
@@ -51,7 +55,7 @@ public class LoggerListener implements Listener {
                         if (!blocks.isEmpty()) {
                             for (int i = 0; i < blocks.size(); i++) {
                                 Block log = blocks.get(i);
-                                pu.breakBlock(player, log, false, 0, false);
+                                pu.breakBlock(player, log, false, 0, false, smelting);
                                 log.getWorld().playSound(log.getLocation(), Sound.BLOCK_WOOD_BREAK, 1, 1);
 
                                 for (BlockFace face : faces) {
