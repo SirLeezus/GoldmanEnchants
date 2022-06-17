@@ -1,7 +1,7 @@
 name: GoldmanEnchants
 main: lee.code.enchants.GoldmanEnchants
 version: ${project.version}
-api-version: 1.18
+api-version: 1.19
 author: Lee
 depend: [GoldmanChunks, GoldmanPets, GoldmanEssentials, CoreProtect]
 commands:

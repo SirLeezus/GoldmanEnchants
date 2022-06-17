@@ -2,6 +2,7 @@ package lee.code.enchants;
 
 import lee.code.enchants.lists.*;
 import lombok.Getter;
+import org.bukkit.entity.EntityType;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class Data {
     @Getter private final List<String> supportedPickaxeSmeltingBlocks = new ArrayList<>();
     @Getter private final List<String> supportedShovelSmeltingBlocks = new ArrayList<>();
     @Getter private final List<String> supportedAxeSmeltingBlocks = new ArrayList<>();
+    @Getter private final List<EntityType> soulReaperBlackList = new ArrayList<>();
 
     private final ConcurrentHashMap<UUID, BukkitTask> lightningStrikeTask = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<UUID, Long> lightningStrikeTimer = new ConcurrentHashMap<>();
@@ -74,5 +76,8 @@ public class Data {
 
         //supported axe block keys
         supportedAxeSmeltingBlocks.addAll(EnumSet.allOf(AxeSmeltingBlocks.class).stream().map(AxeSmeltingBlocks::name).toList());
+
+        //soul reaper black list
+        soulReaperBlackList.addAll(EnumSet.allOf(SoulReaperBlackList.class).stream().map(SoulReaperBlackList::getType).toList());
     }
 }

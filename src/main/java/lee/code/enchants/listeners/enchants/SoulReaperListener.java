@@ -39,7 +39,7 @@ public class SoulReaperListener implements Listener {
             ItemMeta meta = handItem.getItemMeta();
             if (meta != null && meta.hasEnchant(customEnchants.SOUL_REAPER)) {
                 Entity entity = e.getRightClicked();
-                if (entity instanceof Mob)  {
+                if (entity instanceof Mob && !data.getSoulReaperBlackList().contains(entity.getType()))  {
                     Chunk chunk = entity.getLocation().getChunk();
                     if (chunkAPI.canInteractInChunk(uuid, chunk)) {
                         if (data.hasPlayerClickDelay(uuid)) return;

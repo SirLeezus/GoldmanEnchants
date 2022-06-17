@@ -16,7 +16,7 @@ import net.minecraft.nbt.TagParser;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftEntity;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -206,8 +206,11 @@ public class PU {
                 item = new ItemStack(resultMat);
             }
             item.setAmount(Math.min(amount, item.getMaxStackSize()));
-            block.getWorld().dropItemNaturally(block.getLocation(), item);
-            block.setType(Material.AIR);
+
+            if (blockType != Material.AIR) {
+                block.getWorld().dropItemNaturally(block.getLocation(), item);
+                block.setType(Material.AIR);
+            }
         }
     }
 

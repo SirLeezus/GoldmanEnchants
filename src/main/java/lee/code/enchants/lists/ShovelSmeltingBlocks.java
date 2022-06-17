@@ -9,7 +9,7 @@ public enum ShovelSmeltingBlocks {
 
     SAND(Material.SAND, Material.GLASS),
     RED_SAND(Material.RED_SAND, Material.GLASS),
-    CLAY(Material.CLAY, Material.BRICKS),
+    CLAY(Material.CLAY, Material.BRICK),
 
     ;
 
