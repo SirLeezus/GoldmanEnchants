@@ -38,6 +38,7 @@ public enum ShovelDestroyerBlocks {
     SNOW_BLOCK(Material.SNOW_BLOCK),
     SOUL_SAND(Material.SOUL_SAND),
     SOUL_SOIL(Material.SOUL_SOIL),
+    MUD(Material.MUD),
 
     ;
 
