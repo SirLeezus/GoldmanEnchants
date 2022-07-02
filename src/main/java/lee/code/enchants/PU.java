@@ -55,7 +55,7 @@ public class PU {
     public int enchantChoiceRNG() {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
         Data data = plugin.getData();
-        return random.nextInt(data.getCustomEnchantKeys().size() + 1);
+        return random.nextInt(data.getCustomEnchantKeys().size());
     }
 
     public String formatCapitalization(String message) {
