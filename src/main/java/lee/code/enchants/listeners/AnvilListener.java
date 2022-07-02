@@ -75,7 +75,7 @@ public class AnvilListener implements Listener {
 
                     if (!result.equals(firstSlot)) {
                         e.setResult(result);
-                        if (e.getInventory().getRepairCostAmount() == 0) Bukkit.getServer().getScheduler().runTaskLater(plugin, () -> e.getInventory().setRepairCost(3), 1L);
+                        if (e.getInventory().getRepairCost() == 0) Bukkit.getServer().getScheduler().runTaskLater(plugin, () -> e.getInventory().setRepairCost(3), 1L);
                     } else e.setResult(null);
                 } else e.setResult(null);
             }
