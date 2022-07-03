@@ -4,6 +4,7 @@ import lee.code.chunks.ChunkAPI;
 import lee.code.enchants.commands.CustomEnchantCMD;
 import lee.code.enchants.commands.CustomEnchantTab;
 import lee.code.enchants.listeners.AnvilListener;
+import lee.code.enchants.listeners.DisenchantListener;
 import lee.code.enchants.listeners.EnchantListener;
 import lee.code.enchants.listeners.GrindstoneListener;
 import lee.code.enchants.listeners.enchants.*;
@@ -64,6 +65,7 @@ public class GoldmanEnchants extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new LifeStealListener(), this);
         getServer().getPluginManager().registerEvents(new MoltenShotListener(), this);
         getServer().getPluginManager().registerEvents(new SmeltingListener(), this);
+        getServer().getPluginManager().registerEvents(new DisenchantListener(), this);
     }
 
     public static GoldmanEnchants getPlugin() {

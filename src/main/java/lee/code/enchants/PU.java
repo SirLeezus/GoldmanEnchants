@@ -52,6 +52,10 @@ public class PU {
         return random.nextInt(1000);
     }
 
+    public int disenchantChanceRNG(int range) {
+        return random.nextInt(range);
+    }
+
     public int enchantChoiceRNG() {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
         Data data = plugin.getData();
@@ -124,6 +128,27 @@ public class PU {
                 }
             }
         }
+    }
+
+    public ItemMeta removeCustomEnchant(ItemMeta itemMeta, Enchantment enchantment) {
+        List<Component> lore = new ArrayList<>();
+        if (itemMeta.lore() != null) lore.addAll(Objects.requireNonNull(itemMeta.lore()));
+
+        if (!lore.isEmpty()) {
+            if (itemMeta instanceof EnchantmentStorageMeta bookMeta) {
+                if (bookMeta.hasStoredEnchant(enchantment)) {
+                    removeCustomEnchantLore(lore, enchantment);
+                }
+            } else if (itemMeta.hasEnchant(enchantment)) {
+                removeCustomEnchantLore(lore, enchantment);
+            }
+        }
+
+        if (itemMeta instanceof EnchantmentStorageMeta bookMeta) bookMeta.removeStoredEnchant(enchantment);
+        else itemMeta.removeEnchant(enchantment);
+        itemMeta.lore(lore);
+
+        return itemMeta;
     }
 
     public ItemMeta applyCustomEnchant(ItemMeta itemMeta, Enchantment enchantment, int level) {

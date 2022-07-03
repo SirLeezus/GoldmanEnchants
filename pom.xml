@@ -164,5 +164,12 @@
             <version>20.4</version>
             <scope>provided</scope>
         </dependency>
+        <!-- GoldmanCore API -->
+        <dependency>
+            <groupId>lee.code.core</groupId>
+            <artifactId>goldman-core</artifactId>
+            <version>1.0.0</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>

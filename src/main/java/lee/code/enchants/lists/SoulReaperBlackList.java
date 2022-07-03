@@ -9,8 +9,6 @@ public enum SoulReaperBlackList {
 
     ENDER_DRAGON(EntityType.ENDER_DRAGON),
     WITHER(EntityType.WITHER),
-    ELDER_GUARDIAN(EntityType.ELDER_GUARDIAN),
-    WARDEN(EntityType.WARDEN),
 
     ;
 
