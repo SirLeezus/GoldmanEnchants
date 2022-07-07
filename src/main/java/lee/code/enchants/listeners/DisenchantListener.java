@@ -32,7 +32,6 @@ public class DisenchantListener implements Listener {
             offHandItem.setAmount(1);
             if (handItem.hasItemMeta() && offHandItem.getType().equals(Material.BOOK)) {
                 if (BukkitUtils.hasClickDelay(player)) return;
-                else BukkitUtils.addClickDelay(player);
                 e.setCancelled(true);
 
                 ItemMeta handItemMeta = handItem.getItemMeta();
