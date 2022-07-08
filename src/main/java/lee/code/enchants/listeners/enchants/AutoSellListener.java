@@ -41,7 +41,7 @@ public class AutoSellListener implements Listener {
                         if (block != null) {
                             ItemStack handItem = player.getInventory().getItemInMainHand();
                             ItemMeta handItemMeta = handItem.getItemMeta();
-                            if (handItemMeta != null && handItemMeta.hasEnchant(plugin.getCustomEnchants().AUTO_SELL)) {
+                            if (handItemMeta != null && handItemMeta.hasEnchant(plugin.getCustomEnchant().AUTO_SELL)) {
                                 Chunk chunk = block.getChunk();
                                 if (chunkAPI.canInteractInChunk(uuid, chunk)) {
                                     BlockState state = block.getState();

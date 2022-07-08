@@ -19,6 +19,8 @@ public enum AxeSmeltingBlocks {
     STRIPPED_BIRCH_LOG(Material.STRIPPED_BIRCH_LOG, Material.CHARCOAL),
     JUNGLE_LOG(Material.JUNGLE_LOG, Material.CHARCOAL),
     STRIPPED_JUNGLE_LOG(Material.STRIPPED_JUNGLE_LOG, Material.CHARCOAL),
+    MANGROVE_LOG(Material.MANGROVE_LOG, Material.CHARCOAL),
+    STRIPPED_MANGROVE_LOG(Material.STRIPPED_MANGROVE_LOG, Material.CHARCOAL),
 
     ;
 

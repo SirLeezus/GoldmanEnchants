@@ -8,7 +8,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.enchantments.Enchantment;
 
 @AllArgsConstructor
-public enum Enchants {
+public enum CustomEnchantData {
 
     LOGGER("Logger", "&#964B00"),
     DESTROYER("Destroyer", "&#DE0000"),
@@ -19,6 +19,7 @@ public enum Enchants {
     LIFE_STEAL("Life Steal", "&#FF1700"),
     MOLTEN_SHOT("Molten Shot", "&#CF6010"),
     SMELTING("Smelting", "&#FFBF00"),
+    HEAD_HUNTER("Head Hunter", "&#16B037")
     ;
 
     @Getter private final String lore;

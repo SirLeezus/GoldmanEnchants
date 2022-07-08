@@ -1,6 +1,6 @@
 package lee.code.enchants.listeners.enchants;
 
-import lee.code.enchants.CustomEnchants;
+import lee.code.enchants.CustomEnchant;
 import lee.code.enchants.Data;
 import lee.code.enchants.GoldmanEnchants;
 import lee.code.enchants.PU;
@@ -21,23 +21,23 @@ public class SmeltingListener implements Listener {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
         Data data = plugin.getData();
         PU pu = plugin.getPU();
-        CustomEnchants customEnchants = plugin.getCustomEnchants();
+        CustomEnchant customEnchant = plugin.getCustomEnchant();
 
         Player player = e.getPlayer();
         ItemStack handItem = player.getInventory().getItemInMainHand();
         ItemMeta itemMeta = handItem.getItemMeta();
-        if (itemMeta != null && itemMeta.hasEnchant(customEnchants.SMELTING) && !itemMeta.hasEnchant(customEnchants.DESTROYER) && !itemMeta.hasEnchant(customEnchants.LOGGER)) {
+        if (itemMeta != null && itemMeta.hasEnchant(customEnchant.SMELTING) && !itemMeta.hasEnchant(customEnchant.DESTROYER) && !itemMeta.hasEnchant(customEnchant.LOGGER)) {
             Block block = e.getBlock();
             Material blockType = block.getType();
             if (data.getSupportedPickaxeSmeltingBlocks().contains(blockType.name()) && handItem.getType().name().endsWith("PICKAXE")) {
                 e.setCancelled(true);
-                pu.breakBlock(player, block, itemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.hasEnchant(Enchantment.SILK_TOUCH), itemMeta.hasEnchant(customEnchants.SMELTING));
+                pu.breakBlock(player, block, itemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.hasEnchant(Enchantment.SILK_TOUCH), itemMeta.hasEnchant(customEnchant.SMELTING));
             } else if (data.getSupportedShovelSmeltingBlocks().contains(blockType.name()) && handItem.getType().name().endsWith("SHOVEL")) {
                 e.setCancelled(true);
-                pu.breakBlock(player, block, itemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.hasEnchant(Enchantment.SILK_TOUCH), itemMeta.hasEnchant(customEnchants.SMELTING));
+                pu.breakBlock(player, block, itemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.hasEnchant(Enchantment.SILK_TOUCH), itemMeta.hasEnchant(customEnchant.SMELTING));
             } else if (data.getSupportedAxeSmeltingBlocks().contains(blockType.name()) && handItem.getType().name().endsWith("AXE")) {
                 e.setCancelled(true);
-                pu.breakBlock(player, block, itemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.hasEnchant(Enchantment.SILK_TOUCH), itemMeta.hasEnchant(customEnchants.SMELTING));
+                pu.breakBlock(player, block, itemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.hasEnchant(Enchantment.SILK_TOUCH), itemMeta.hasEnchant(customEnchant.SMELTING));
             }
         }
     }

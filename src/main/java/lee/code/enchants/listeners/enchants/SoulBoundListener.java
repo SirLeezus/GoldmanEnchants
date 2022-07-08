@@ -30,7 +30,7 @@ public class SoulBoundListener implements Listener {
                 if (drop != null) {
                     ItemMeta itemMeta = drop.getItemMeta();
 
-                    if (itemMeta != null && itemMeta.hasEnchant(plugin.getCustomEnchants().SOUL_BOUND)) {
+                    if (itemMeta != null && itemMeta.hasEnchant(plugin.getCustomEnchant().SOUL_BOUND)) {
                         keepItems.add(drop);
                     } else dropItems.add(drop);
                 }

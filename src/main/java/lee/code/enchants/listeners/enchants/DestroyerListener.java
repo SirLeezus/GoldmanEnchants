@@ -15,6 +15,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
@@ -32,17 +33,18 @@ public class DestroyerListener implements Listener {
         Player player = e.getPlayer();
         ItemStack handItem = player.getInventory().getItemInMainHand();
         ItemMeta itemMeta = handItem.getItemMeta();
-        if (itemMeta != null && itemMeta.hasEnchant(plugin.getCustomEnchants().DESTROYER)) {
+        if (itemMeta != null && itemMeta.hasEnchant(plugin.getCustomEnchant().DESTROYER)) {
             Block block = e.getBlock();
-            if (data.getSupportedPickaxeDestroyerBlocks().contains(block.getType().name()) && handItem.getType().name().endsWith("PICKAXE")) {
+            if (data.getSupportedShovelDestroyerBlocks().contains(block.getType().name()) && handItem.getType().name().endsWith("SHOVEL") || data.getSupportedPickaxeDestroyerBlocks().contains(block.getType().name()) && handItem.getType().name().endsWith("PICKAXE")) {
                 e.setCancelled(true);
                 List<Block> blocks = getBlocks(player.getUniqueId(), block.getRelative(getDirection(player)), handItem.getType());
-                for (Block sBlock : blocks) pu.breakBlock(player, sBlock, itemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.hasEnchant(Enchantment.SILK_TOUCH), itemMeta.hasEnchant(plugin.getCustomEnchants().SMELTING));
-
-            } else if (data.getSupportedShovelDestroyerBlocks().contains(block.getType().name()) && handItem.getType().name().endsWith("SHOVEL")) {
-                e.setCancelled(true);
-                List<Block> blocks = getBlocks(player.getUniqueId(), block.getRelative(getDirection(player)), handItem.getType());
-                for (Block sBlock : blocks) pu.breakBlock(player, sBlock, itemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.hasEnchant(Enchantment.SILK_TOUCH), itemMeta.hasEnchant(plugin.getCustomEnchants().SMELTING));
+                if (itemMeta instanceof Damageable damageable) {
+                    int newDam = damageable.getDamage() + blocks.size();
+                    damageable.setDamage(newDam);
+                    handItem.setItemMeta(itemMeta);
+                    player.getInventory().setItemInMainHand(handItem);
+                }
+                for (Block sBlock : blocks) pu.breakBlock(player, sBlock, itemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.hasEnchant(Enchantment.SILK_TOUCH), itemMeta.hasEnchant(plugin.getCustomEnchant().SMELTING));
             }
         }
     }

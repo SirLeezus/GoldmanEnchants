@@ -1,9 +1,10 @@
 package lee.code.enchants.listeners.enchants;
 
-import lee.code.enchants.CustomEnchants;
+import lee.code.enchants.CustomEnchant;
 import lee.code.enchants.GoldmanEnchants;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
@@ -19,25 +20,26 @@ public class MoltenShotListener implements Listener {
     @EventHandler
     public void onMoltenShot(EntityShootBowEvent e) {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
-        CustomEnchants customEnchants = plugin.getCustomEnchants();
+        CustomEnchant customEnchant = plugin.getCustomEnchant();
 
         if (e.getEntity() instanceof Player player) {
             ItemStack bow = e.getBow();
             if (bow != null) {
                 ItemMeta bowMeta = bow.getItemMeta();
-                if (bowMeta.hasEnchant(customEnchants.MOLTEN_SHOT)) {
+                if (bowMeta.hasEnchant(customEnchant.MOLTEN_SHOT)) {
                     Location eye = player.getEyeLocation();
                     Location loc = eye.add(eye.getDirection().multiply(1.2));
                     Fireball fireball = (Fireball) loc.getWorld().spawnEntity(loc, EntityType.FIREBALL);
                     e.setProjectile(fireball);
                     fireball.setVelocity(loc.getDirection().normalize().multiply(2));
 
-                    int enchantLevel = bowMeta.getEnchantLevel(customEnchants.MOLTEN_SHOT);
+                    int enchantLevel = bowMeta.getEnchantLevel(customEnchant.MOLTEN_SHOT);
+                    int powerLevel = bowMeta.hasEnchant(Enchantment.ARROW_DAMAGE) ? bowMeta.getEnchantLevel(Enchantment.ARROW_DAMAGE) : 0;
 
                     double enchantYield = switch (enchantLevel) {
-                        case 1 -> 1;
-                        case 2 -> 1.7;
-                        default -> 2;
+                        case 1 -> 0.5 + powerLevel + Double.parseDouble("0." + powerLevel);
+                        case 2 -> 1 + powerLevel + Double.parseDouble("0." + powerLevel);
+                        default -> 1.3 + powerLevel + Double.parseDouble("0." + powerLevel);
                     };
 
                     fireball.setYield((float) enchantYield);

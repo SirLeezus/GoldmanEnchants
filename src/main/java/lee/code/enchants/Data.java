@@ -2,8 +2,8 @@ package lee.code.enchants;
 
 import lee.code.enchants.lists.*;
 import lombok.Getter;
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -15,7 +15,7 @@ public class Data {
 
     @Getter private final List<UUID> playerClickDelay = new ArrayList<>();
     @Getter private final List<String> customEnchantKeys = new ArrayList<>();
-    @Getter private final List<String> supportedLoggerBlocks = new ArrayList<>();
+    @Getter private final List<Material> supportedLoggerBlocks = new ArrayList<>();
     @Getter private final List<String> supportedPickaxeDestroyerBlocks = new ArrayList<>();
     @Getter private final List<String> supportedShovelDestroyerBlocks = new ArrayList<>();
     @Getter private final List<String> supportedPickaxeSmeltingBlocks = new ArrayList<>();
@@ -23,19 +23,20 @@ public class Data {
     @Getter private final List<String> supportedAxeSmeltingBlocks = new ArrayList<>();
     @Getter private final List<EntityType> soulReaperBlackList = new ArrayList<>();
 
-    private final ConcurrentHashMap<UUID, BukkitTask> lightningStrikeTask = new ConcurrentHashMap<>();
+
+    private final ConcurrentHashMap<UUID, Integer> lightningStrikeTask = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<UUID, Long> lightningStrikeTimer = new ConcurrentHashMap<>();
 
     public boolean hasLightningStrikeTask(UUID player) {
         return lightningStrikeTask.containsKey(player);
     }
-    public void addLightningStrikeTask(UUID player, BukkitTask task) {
-        lightningStrikeTask.put(player, task);
+    public void addLightningStrikeTask(UUID player, int id) {
+        lightningStrikeTask.put(player, id);
     }
     public void removeLightningStrikeTask(UUID player) {
         lightningStrikeTask.remove(player);
     }
-    public BukkitTask getLightningStrikeTask(UUID uuid) {
+    public int getLightningStrikeTask(UUID uuid) {
         return lightningStrikeTask.get(uuid);
     }
 
@@ -56,11 +57,11 @@ public class Data {
     }
 
     public void loadData() {
-        //enchant keys
-        customEnchantKeys.addAll(EnumSet.allOf(Enchants.class).stream().map(Enchants::name).toList());
+        //custom enchant keys
+        customEnchantKeys.addAll(EnumSet.allOf(CustomEnchantData.class).stream().map(CustomEnchantData::name).toList());
 
         //supported logger enchant block keys
-        supportedLoggerBlocks.addAll(EnumSet.allOf(LoggerBlocks.class).stream().map(LoggerBlocks::name).toList());
+        supportedLoggerBlocks.addAll(EnumSet.allOf(LoggerBlocks.class).stream().map(LoggerBlocks::getLog).toList());
 
         //supported destroyer pickaxe block keys
         supportedPickaxeDestroyerBlocks.addAll(EnumSet.allOf(PickaxeDestroyerBlocks.class).stream().map(PickaxeDestroyerBlocks::name).toList());

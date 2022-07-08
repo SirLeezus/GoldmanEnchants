@@ -1,6 +1,6 @@
 package lee.code.enchants.listeners;
 
-import lee.code.enchants.CustomEnchants;
+import lee.code.enchants.CustomEnchant;
 import lee.code.enchants.Data;
 import lee.code.enchants.GoldmanEnchants;
 import lee.code.enchants.PU;
@@ -28,7 +28,7 @@ public class EnchantListener implements Listener {
             int level = e.getExpLevelCost();
             ItemStack item = e.getItem();
             ItemMeta itemMeta = item.getItemMeta();
-            CustomEnchants enchants = plugin.getCustomEnchants();
+            CustomEnchant enchants = plugin.getCustomEnchant();
             if (itemMeta != null) {
                 if (level == 30) {
                     int rng = pu.enchantChoiceRNG();

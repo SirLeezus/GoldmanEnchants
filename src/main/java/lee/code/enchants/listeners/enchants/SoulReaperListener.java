@@ -1,7 +1,7 @@
 package lee.code.enchants.listeners.enchants;
 
 import lee.code.chunks.ChunkAPI;
-import lee.code.enchants.CustomEnchants;
+import lee.code.enchants.CustomEnchant;
 import lee.code.enchants.Data;
 import lee.code.enchants.GoldmanEnchants;
 import lee.code.enchants.PU;
@@ -30,14 +30,14 @@ public class SoulReaperListener implements Listener {
         PetsAPI petsAPI = plugin.getPetsAPI();
         ChunkAPI chunkAPI = plugin.getChunkAPI();
         PU pu = plugin.getPU();
-        CustomEnchants customEnchants = plugin.getCustomEnchants();
+        CustomEnchant customEnchant = plugin.getCustomEnchant();
 
         Player player = e.getPlayer();
         UUID uuid = player.getUniqueId();
         if (player.isSneaking()) {
             ItemStack handItem = player.getInventory().getItemInMainHand();
             ItemMeta meta = handItem.getItemMeta();
-            if (meta != null && meta.hasEnchant(customEnchants.SOUL_REAPER)) {
+            if (meta != null && meta.hasEnchant(customEnchant.SOUL_REAPER)) {
                 Entity entity = e.getRightClicked();
                 if (entity instanceof Mob && !data.getSoulReaperBlackList().contains(entity.getType()))  {
                     Chunk chunk = entity.getLocation().getChunk();
@@ -77,7 +77,7 @@ public class SoulReaperListener implements Listener {
         Data data = plugin.getData();
         ChunkAPI chunkAPI = plugin.getChunkAPI();
         PU pu = plugin.getPU();
-        CustomEnchants customEnchants = plugin.getCustomEnchants();
+        CustomEnchant customEnchant = plugin.getCustomEnchant();
 
         Player player = e.getPlayer();
         if (player.isSneaking()) {
@@ -85,7 +85,7 @@ public class SoulReaperListener implements Listener {
                 ItemStack handItem = player.getInventory().getItemInMainHand();
                 ItemMeta itemMeta = handItem.getItemMeta();
                 UUID uuid = player.getUniqueId();
-                if (itemMeta != null && itemMeta.hasEnchant(customEnchants.SOUL_REAPER)) {
+                if (itemMeta != null && itemMeta.hasEnchant(customEnchant.SOUL_REAPER)) {
                     Block block = player.getTargetBlock(5);
                     World world = player.getWorld();
                     if (block != null && !block.getType().equals(Material.AIR)) {

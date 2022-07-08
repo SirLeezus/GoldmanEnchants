@@ -35,7 +35,7 @@ public class LightningStrikeListener implements Listener {
                 ItemStack handItem = player.getInventory().getItemInMainHand();
                 ItemMeta itemMeta = handItem.getItemMeta();
                 UUID uuid = player.getUniqueId();
-                if (itemMeta != null && itemMeta.hasEnchant(plugin.getCustomEnchants().LIGHTNING_STRIKE)) {
+                if (itemMeta != null && itemMeta.hasEnchant(plugin.getCustomEnchant().LIGHTNING_STRIKE)) {
                     if (!data.hasLightningStrikeTask(uuid)) {
                         Block block = player.getTargetBlock(10);
                         if (block != null) {

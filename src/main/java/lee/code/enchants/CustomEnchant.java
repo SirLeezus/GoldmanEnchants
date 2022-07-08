@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
-public class CustomEnchants {
+public class CustomEnchant {
 
     public final Enchantment LOGGER = new EnchantmentWrapper("logger", "Logger", 0, new Material[] {Material.ENCHANTED_BOOK, Material.BOOK, Material.DIAMOND_AXE, Material.NETHERITE_AXE, Material.GOLDEN_AXE, Material.IRON_AXE, Material.WOODEN_AXE, Material.STONE_AXE });
     public final Enchantment DESTROYER = new EnchantmentWrapper("destroyer", "Destroyer", 0, new Material[] {Material.ENCHANTED_BOOK, Material.BOOK, Material.DIAMOND_PICKAXE, Material.NETHERITE_PICKAXE, Material.GOLDEN_PICKAXE, Material.IRON_PICKAXE, Material.WOODEN_PICKAXE, Material.STONE_PICKAXE, Material.DIAMOND_SHOVEL, Material.NETHERITE_SHOVEL, Material.GOLDEN_SHOVEL, Material.IRON_SHOVEL, Material.WOODEN_SHOVEL, Material.STONE_SHOVEL });
@@ -21,9 +21,10 @@ public class CustomEnchants {
     public final Enchantment LIFE_STEAL = new EnchantmentWrapper("life_steal", "Life Steal", 3, new Material[] {Material.ENCHANTED_BOOK, Material.BOOK, Material.NETHERITE_SWORD, Material.DIAMOND_SWORD, Material.GOLDEN_SWORD, Material.IRON_SWORD, Material.WOODEN_SWORD, Material.STONE_SWORD, Material.NETHERITE_AXE, Material.DIAMOND_AXE, Material.GOLDEN_AXE, Material.IRON_AXE, Material.WOODEN_AXE, Material.STONE_AXE });
     public final Enchantment MOLTEN_SHOT = new EnchantmentWrapper("molten_shot", "Molten Shot", 3, new Material[] {Material.ENCHANTED_BOOK, Material.BOOK, Material.BOW });
     public final Enchantment SMELTING = new EnchantmentWrapper("smelting", "Smelting", 0, new Material[] {Material.ENCHANTED_BOOK, Material.BOOK, Material.DIAMOND_PICKAXE, Material.NETHERITE_PICKAXE, Material.GOLDEN_PICKAXE, Material.IRON_PICKAXE, Material.WOODEN_PICKAXE, Material.STONE_PICKAXE, Material.DIAMOND_SHOVEL, Material.NETHERITE_SHOVEL, Material.GOLDEN_SHOVEL, Material.IRON_SHOVEL, Material.WOODEN_SHOVEL, Material.STONE_SHOVEL, Material.NETHERITE_AXE, Material.DIAMOND_AXE, Material.GOLDEN_AXE, Material.IRON_AXE, Material.WOODEN_AXE, Material.STONE_AXE });
+    public final Enchantment HEAD_HUNTER = new EnchantmentWrapper("head_hunter", "Head Hunter", 3, new Material[] {Material.ENCHANTED_BOOK, Material.BOOK, Material.NETHERITE_SWORD, Material.DIAMOND_SWORD, Material.GOLDEN_SWORD, Material.IRON_SWORD, Material.WOODEN_SWORD, Material.STONE_SWORD, Material.NETHERITE_AXE, Material.DIAMOND_AXE, Material.GOLDEN_AXE, Material.IRON_AXE, Material.WOODEN_AXE, Material.STONE_AXE });
 
     public void register() {
-        List<Enchantment> customEnchants = Arrays.asList(LOGGER, DESTROYER, LIGHTNING_STRIKE, SOUL_BOUND, AUTO_SELL, SOUL_REAPER, LIFE_STEAL, MOLTEN_SHOT, SMELTING);
+        List<Enchantment> customEnchants = Arrays.asList(LOGGER, DESTROYER, LIGHTNING_STRIKE, SOUL_BOUND, AUTO_SELL, SOUL_REAPER, LIFE_STEAL, MOLTEN_SHOT, SMELTING, HEAD_HUNTER);
         List<Enchantment> enchants = Arrays.stream(Enchantment.values()).toList();
 
         for (Enchantment cEnchant : customEnchants) {
@@ -61,6 +62,7 @@ public class CustomEnchants {
             case "LIFE_STEAL" -> LIFE_STEAL;
             case "MOLTEN_SHOT" -> MOLTEN_SHOT;
             case "SMELTING" -> SMELTING;
+            case "HEAD_HUNTER" -> HEAD_HUNTER;
             default -> null;
         };
     }

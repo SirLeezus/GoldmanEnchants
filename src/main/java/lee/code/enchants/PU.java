@@ -2,7 +2,7 @@ package lee.code.enchants;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import lee.code.enchants.lists.AxeSmeltingBlocks;
-import lee.code.enchants.lists.Enchants;
+import lee.code.enchants.lists.CustomEnchantData;
 import lee.code.enchants.lists.PickaxeSmeltingBlocks;
 import lee.code.enchants.lists.ShovelSmeltingBlocks;
 import lee.code.essentials.EssentialsAPI;
@@ -26,7 +26,6 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.bukkit.scheduler.BukkitTask;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -52,6 +51,11 @@ public class PU {
         return random.nextInt(1000);
     }
 
+    public int enchantHeadHunterChanceRNG(int level) {
+        int num = random.nextInt(1000);
+        return num + (level * 50);
+    }
+
     public int disenchantChanceRNG(int range) {
         return random.nextInt(range);
     }
@@ -72,8 +76,8 @@ public class PU {
         Data data = plugin.getData();
 
         if (data.hasLightningStrikeTask(uuid)) {
-            BukkitTask task = data.getLightningStrikeTask(uuid);
-            task.cancel();
+            int task = data.getLightningStrikeTask(uuid);
+            Bukkit.getScheduler().cancelTask(task);
         }
 
         int delay = 60;
@@ -89,7 +93,7 @@ public class PU {
                 data.removeLightningStrikeTask(uuid);
             }
 
-        }.runTaskLater(plugin, delay * 20L));
+        }.runTaskLater(plugin, delay * 20L).getTaskId());
     }
 
     public String formatSeconds(long time) {
@@ -169,7 +173,7 @@ public class PU {
         if (level > enchantment.getMaxLevel()) level = enchantment.getMaxLevel();
         if (itemMeta instanceof EnchantmentStorageMeta bookMeta) bookMeta.addStoredEnchant(enchantment, level, false);
         else itemMeta.addEnchant(enchantment, level, false);
-        Component enchantLore = Enchants.valueOf(enchantKey).getLore(enchantment, level);
+        Component enchantLore = CustomEnchantData.valueOf(enchantKey).getLore(enchantment, level);
 
         if (!lore.isEmpty()) {
             lore.add(enchantLore);

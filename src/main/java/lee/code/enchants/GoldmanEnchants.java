@@ -16,7 +16,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class GoldmanEnchants extends JavaPlugin {
 
-    @Getter private CustomEnchants customEnchants;
     @Getter private PU pU;
     @Getter private Data data;
     @Getter private EnchantsAPI enchantsAPI;
@@ -24,12 +23,13 @@ public class GoldmanEnchants extends JavaPlugin {
     @Getter private EssentialsAPI essentialsAPI;
     @Getter private PetsAPI petsAPI;
     @Getter private CoreProtectAPI coreProtectAPI;
+    @Getter private CustomEnchant customEnchant;
 
     @Override
     public void onEnable() {
         this.pU = new PU();
         this.data = new Data();
-        this.customEnchants = new CustomEnchants();
+        this.customEnchant = new CustomEnchant();
         this.enchantsAPI = new EnchantsAPI();
         this.chunkAPI = new ChunkAPI();
         this.essentialsAPI = new EssentialsAPI();
@@ -37,7 +37,7 @@ public class GoldmanEnchants extends JavaPlugin {
         this.petsAPI = new PetsAPI();
 
         registerListeners();
-        customEnchants.register();
+        customEnchant.register();
         registerCommands();
         data.loadData();
     }
@@ -66,6 +66,7 @@ public class GoldmanEnchants extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new MoltenShotListener(), this);
         getServer().getPluginManager().registerEvents(new SmeltingListener(), this);
         getServer().getPluginManager().registerEvents(new DisenchantListener(), this);
+        getServer().getPluginManager().registerEvents(new HeadHunterListener(), this);
     }
 
     public static GoldmanEnchants getPlugin() {
