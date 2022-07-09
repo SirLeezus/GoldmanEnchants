@@ -1,5 +1,6 @@
 package lee.code.enchants.commands;
 
+import lee.code.core.util.bukkit.BukkitUtils;
 import lee.code.enchants.Data;
 import lee.code.enchants.GoldmanEnchants;
 import lee.code.enchants.PU;
@@ -27,13 +28,13 @@ public class CustomEnchantCMD implements CommandExecutor {
                 int level = 1;
                 if (args.length > 1) {
                     String sLevel = args[1];
-                    if (pu.containOnlyNumbers(sLevel)) level = Integer.parseInt(sLevel);
+                    if (BukkitUtils.containOnlyNumbers(sLevel)) level = Integer.parseInt(sLevel);
                 }
                 if (handItem.getType() != Material.AIR) {
                     ItemMeta meta = handItem.getItemMeta();
                     if (data.getCustomEnchantKeys().contains(enchantName)) {
                         handItem.setItemMeta(pu.applyCustomEnchant(meta, plugin.getCustomEnchant().valueOf(enchantName), level));
-                        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ENCHANT_COMMAND_SUCCESSFUL.getComponent(new String[] { pu.formatCapitalization(enchantName) })));
+                        player.sendMessage(Lang.PREFIX.getComponent(null).append(Lang.ENCHANT_COMMAND_SUCCESSFUL.getComponent(new String[] { BukkitUtils.parseCapitalization(enchantName) })));
                     }
                 }
             } else player.sendMessage(Lang.USAGE.getComponent(new String[] { command.getUsage() }));

@@ -1,6 +1,7 @@
 package lee.code.enchants.listeners.enchants;
 
 import lee.code.chunks.ChunkAPI;
+import lee.code.core.util.bukkit.BukkitUtils;
 import lee.code.enchants.Data;
 import lee.code.enchants.GoldmanEnchants;
 import lee.code.enchants.PU;
@@ -52,7 +53,7 @@ public class LightningStrikeListener implements Listener {
                         if (time < delay) {
                             e.setCancelled(true);
                             long timeLeft = delay - time;
-                            player.sendActionBar(Lang.LIGHTNING_STRIKE_DELAY.getComponent(new String[] { pu.formatSeconds(timeLeft) }));
+                            player.sendActionBar(Lang.LIGHTNING_STRIKE_DELAY.getComponent(new String[] { BukkitUtils.parseSeconds(timeLeft) }));
                         }
                     }
                 }

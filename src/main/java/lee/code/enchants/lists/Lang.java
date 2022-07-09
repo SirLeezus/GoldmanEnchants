@@ -1,7 +1,6 @@
 package lee.code.enchants.lists;
 
-import lee.code.enchants.GoldmanEnchants;
-import lee.code.enchants.PU;
+import lee.code.core.util.bukkit.BukkitUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
@@ -11,6 +10,7 @@ public enum Lang {
 
     PREFIX("&b&lEnchants &3➔ &r"),
     USAGE("&6&lUsage: &e{0}"),
+    DURABILITY("&cDurability&7: &e{0}&7/&e{1}"),
     CONSOLE_ENCHANTMENT_REGISTERED("&bThe enchantment {0} has been registered."),
     LIGHTNING_STRIKE_DELAY("&cYou can use lightning strike again in {0}&c."),
     ENCHANT_COMMAND_SUCCESSFUL("&aYou enchanted your hand item with &3{0}&a!"),
@@ -23,20 +23,16 @@ public enum Lang {
     @Getter private final String string;
 
     public String getString(String[] variables) {
-        GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
-        PU pu = plugin.getPU();
         String value = string;
-        if (variables == null || variables.length == 0) return pu.format(value);
+        if (variables == null || variables.length == 0) return BukkitUtils.parseColorString(value);
         for (int i = 0; i < variables.length; i++) value = value.replace("{" + i + "}", variables[i]);
-        return pu.format(value);
+        return BukkitUtils.parseColorString(value);
     }
 
     public Component getComponent(String[] variables) {
-        GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
-        PU pu = plugin.getPU();
         String value = string;
-        if (variables == null || variables.length == 0) return pu.formatC(value);
+        if (variables == null || variables.length == 0) return BukkitUtils.parseColorComponent(value);
         for (int i = 0; i < variables.length; i++) value = value.replace("{" + i + "}", variables[i]);
-        return pu.formatC(value);
+        return BukkitUtils.parseColorComponent(value);
     }
 }

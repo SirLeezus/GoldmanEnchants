@@ -1,7 +1,6 @@
 package lee.code.enchants.lists;
 
-import lee.code.enchants.GoldmanEnchants;
-import lee.code.enchants.PU;
+import lee.code.core.util.bukkit.BukkitUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
@@ -26,10 +25,8 @@ public enum CustomEnchantData {
     @Getter private final String color;
 
     public Component getLore(Enchantment enchantment, int level) {
-        GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
-        PU pu = plugin.getPU();
         String value = color + lore;
-        if (enchantment != null && enchantment.getMaxLevel() > 0) value = value + " " + pu.getRomanNumber(level);
-        return pu.formatC(value);
+        if (enchantment != null && enchantment.getMaxLevel() > 0) value = value + " " + BukkitUtils.getRomanNumber(level);
+        return BukkitUtils.parseColorComponent(value);
     }
 }

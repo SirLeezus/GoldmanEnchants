@@ -1,6 +1,7 @@
 package lee.code.enchants.listeners.enchants;
 
 import lee.code.chunks.ChunkAPI;
+import lee.code.core.util.bukkit.BukkitUtils;
 import lee.code.enchants.CustomEnchant;
 import lee.code.enchants.Data;
 import lee.code.enchants.GoldmanEnchants;
@@ -39,20 +40,16 @@ public class LoggerListener implements Listener {
         if (handItemMeta != null && handItemMeta.hasEnchant(customEnchant.LOGGER)) {
             if (!data.getSupportedLoggerBlocks().contains(block.getType())) return;
             else if (handItemMeta instanceof Damageable damageable) {
-                if (damageable.getDamage() >= handItem.getType().getMaxDurability()) return;
+                if (damageable.getDamage() >= handItem.getType().getMaxDurability() - 1) return;
             }
             e.setCancelled(true);
-
             LinkedList<Block> blockList = new LinkedList<>();
             blockList.add(block);
             LinkedList<Block> blocks = getTree(uuid, block, blockList);
             block.getWorld().playSound(block.getLocation(), Sound.BLOCK_WOOD_BREAK, 1, 1);
-            if (handItemMeta instanceof Damageable damageable) {
-                int newDam = damageable.getDamage() + blocks.size();
-                damageable.setDamage(newDam);
-                handItem.setItemMeta(handItemMeta);
-                player.getInventory().setItemInMainHand(handItem);
-            }
+            pu.applyDamage(player, handItemMeta, blocks.size(), handItem.getType().getMaxDurability());
+            handItem.setItemMeta(handItemMeta);
+            player.getInventory().setItemInMainHand(handItem);
             for (Block logs : blocks) {
                 Vector box = logs.getBoundingBox().getCenter();
                 Location location = new Location(logs.getWorld(), box.getX(), box.getY(), box.getZ());

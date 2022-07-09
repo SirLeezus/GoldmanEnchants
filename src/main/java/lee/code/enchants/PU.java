@@ -1,51 +1,25 @@
 package lee.code.enchants;
 
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import lee.code.enchants.lists.AxeSmeltingBlocks;
-import lee.code.enchants.lists.CustomEnchantData;
-import lee.code.enchants.lists.PickaxeSmeltingBlocks;
-import lee.code.enchants.lists.ShovelSmeltingBlocks;
+import lee.code.core.util.bukkit.BukkitUtils;
+import lee.code.enchants.lists.*;
 import lee.code.essentials.EssentialsAPI;
 import net.coreprotect.CoreProtectAPI;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.TagParser;
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftEntity;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitScheduler;
-import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class PU {
 
     private final Random random = new Random();
-    private final DecimalFormat valueFormatter = new DecimalFormat("#,###");
-
-    public String format(String format) { return ChatColor.translateAlternateColorCodes('&', format); }
-
-    public Component formatC(String message) {
-        LegacyComponentSerializer serializer = LegacyComponentSerializer.legacyAmpersand();
-        return Component.empty().decoration(TextDecoration.ITALIC, false).append(serializer.deserialize(message));
-    }
-
-    public String unFormatC(Component message) {
-        PlainTextComponentSerializer serializer = PlainTextComponentSerializer.plainText();
-        return serializer.serialize(message);
-    }
 
     public int enchantChanceRNG() {
         return random.nextInt(1000);
@@ -61,14 +35,7 @@ public class PU {
     }
 
     public int enchantChoiceRNG() {
-        GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
-        Data data = plugin.getData();
-        return random.nextInt(data.getCustomEnchantKeys().size());
-    }
-
-    public String formatCapitalization(String message) {
-        String format = message.toLowerCase().replaceAll("_", " ");
-        return WordUtils.capitalize(format);
+        return random.nextInt(GoldmanEnchants.getPlugin().getData().getCustomEnchantKeys().size());
     }
 
     public void addLightningStrikeDelay(UUID uuid) {
@@ -96,38 +63,12 @@ public class PU {
         }.runTaskLater(plugin, delay * 20L).getTaskId());
     }
 
-    public String formatSeconds(long time) {
-        long days = TimeUnit.SECONDS.toDays(time);
-        long hours = (TimeUnit.SECONDS.toHours(time) - TimeUnit.DAYS.toHours(days));
-        long minutes = (TimeUnit.SECONDS.toMinutes(time) - TimeUnit.HOURS.toMinutes(hours) - TimeUnit.DAYS.toMinutes(days));
-        long seconds = (TimeUnit.SECONDS.toSeconds(time) - TimeUnit.MINUTES.toSeconds(minutes) - TimeUnit.HOURS.toSeconds(hours) - TimeUnit.DAYS.toSeconds(days));
-
-        if (days != 0) return "&e" + days + "&6d&e, " + hours + "&6h&e, " + minutes + "&6m&e, " + seconds + "&6s";
-        else if (hours != 0) return "&e" + hours + "&6h&e, " + minutes + "&6m&e, " + seconds + "&6s";
-        else if (minutes != 0) return "&e" + minutes + "&6m&e, " + seconds + "&6s";
-        else return "&e" + seconds + "&6s";
-    }
-
-    public String formatAmount(int value) { return valueFormatter.format(value); }
-
-    public String formatAmount(double value) { return valueFormatter.format(value); }
-
-    public String formatAmount(long value) { return valueFormatter.format(value); }
-
-    public void addPlayerClickDelay(UUID uuid) {
-        GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
-        Data data = plugin.getData();
-        data.addPlayerClickDelay(uuid);
-        BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-        scheduler.runTaskLater(plugin, () -> data.removePlayerClickDelay(uuid), 5);
-    }
-
     private void removeCustomEnchantLore(List<Component> lore, Enchantment enchantment) {
         if (!lore.isEmpty()) {
             Iterator<Component> itr = lore.iterator();
-            String enchantName = formatCapitalization(enchantment.getKey().getKey());
+            String enchantName = BukkitUtils.parseCapitalization(enchantment.getKey().getKey());
             while (itr.hasNext()) {
-                if (unFormatC(itr.next()).contains(enchantName)) {
+                if (BukkitUtils.serializeComponent(itr.next()).contains(enchantName)) {
                     itr.remove();
                 }
             }
@@ -184,26 +125,6 @@ public class PU {
         return itemMeta;
     }
 
-    public String getRomanNumber(int number) {
-        switch (number) {
-            case 1 -> { return "I"; }
-            case 2 -> { return "II"; }
-            case 3 -> { return "III"; }
-            case 4 -> { return "IV"; }
-            case 5 -> { return "V"; }
-            case 6 -> { return "VI"; }
-            case 7 -> { return "VII"; }
-            case 8 -> { return "VIII"; }
-            case 9 -> { return "IX"; }
-            case 10 -> { return "X"; }
-            default -> { return String.valueOf(number); }
-        }
-    }
-
-    public boolean containOnlyNumbers(String string) {
-        return string.matches("-?[1-9]\\d*|0");
-    }
-
     public void breakBlock(Player player, Block block, boolean fortune, int fortuneLevel, boolean silkTouch, boolean smelting) {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
         EssentialsAPI essentialsAPI = plugin.getEssentialsAPI();
@@ -226,7 +147,7 @@ public class PU {
             ItemStack item = new ItemStack(blockType);
             int amount = 1;
             if (!drops.isEmpty()) item = new ItemStack(drops.get(0).getType());
-            if (fortune && blockType.name().contains("ORE")) amount = booster > 0 ? getDropCount(fortuneLevel) * booster : getDropCount(fortuneLevel);
+            if (fortune && blockType.name().contains("ORE")) amount = booster > 0 ? BukkitUtils.getFortuneDropCount(fortuneLevel) * booster : BukkitUtils.getFortuneDropCount(fortuneLevel);
             if (smelting) {
                 Material resultMat = item.getType();
                 if (data.getSupportedPickaxeSmeltingBlocks().contains(blockType.name()) && handType.name().endsWith("PICKAXE")) resultMat = PickaxeSmeltingBlocks.valueOf(blockType.name()).getResult();
@@ -243,27 +164,15 @@ public class PU {
         }
     }
 
-    private int getDropCount(int level) {
-        int j = random.nextInt(level + 2) - 1;
-        if (j < 0) j = 0;
-        return (j + 1);
-    }
-
-    public String getNBTCompoundData(Entity entity) {
-        net.minecraft.world.entity.Entity nmsEntity = ((CraftEntity) entity).getHandle(); //Converting our Entity to NMS
-        CompoundTag nbtTagCompound = new CompoundTag();
-        nmsEntity.save(nbtTagCompound); // f = save
-        return nbtTagCompound.toString();
-    }
-
-    public void spawnEntity(String nbtTagCompound, EntityType type, Location location) {
-        Entity entity = location.getWorld().spawnEntity(location, type);
-        net.minecraft.world.entity.Entity nmsEntity = ((CraftEntity) entity).getHandle();
-        try {
-            nmsEntity.load(TagParser.parseTag(nbtTagCompound));
-        } catch (CommandSyntaxException ex) {
-            ex.printStackTrace();
+    public void applyDamage(Player player, ItemMeta itemMeta, int amount, int max) {
+        if (itemMeta.hasEnchant(Enchantment.DURABILITY)) {
+            if (random.nextInt(100) <= (100 / (itemMeta.getEnchantLevel(Enchantment.DURABILITY) + 1))) return;
         }
-        entity.teleport(location);
+        if (itemMeta instanceof Damageable damageable) {
+            int dam = Math.min(damageable.getDamage() + amount, max - 1);
+            damageable.setDamage(dam);
+            int currentD = max - dam;
+            if (currentD < 30) player.sendActionBar(Lang.DURABILITY.getComponent(new String[] { String.valueOf(currentD), String.valueOf(max) }));
+        }
     }
 }

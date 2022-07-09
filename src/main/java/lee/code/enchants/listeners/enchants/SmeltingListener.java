@@ -1,5 +1,6 @@
 package lee.code.enchants.listeners.enchants;
 
+import lee.code.core.util.bukkit.BukkitUtils;
 import lee.code.enchants.CustomEnchant;
 import lee.code.enchants.Data;
 import lee.code.enchants.GoldmanEnchants;
@@ -12,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class SmeltingListener implements Listener {
@@ -25,19 +27,21 @@ public class SmeltingListener implements Listener {
 
         Player player = e.getPlayer();
         ItemStack handItem = player.getInventory().getItemInMainHand();
-        ItemMeta itemMeta = handItem.getItemMeta();
-        if (itemMeta != null && itemMeta.hasEnchant(customEnchant.SMELTING) && !itemMeta.hasEnchant(customEnchant.DESTROYER) && !itemMeta.hasEnchant(customEnchant.LOGGER)) {
+        ItemMeta handItemMeta = handItem.getItemMeta();
+        if (handItemMeta != null && handItemMeta.hasEnchant(customEnchant.SMELTING) && !handItemMeta.hasEnchant(customEnchant.DESTROYER) && !handItemMeta.hasEnchant(customEnchant.LOGGER)) {
             Block block = e.getBlock();
             Material blockType = block.getType();
-            if (data.getSupportedPickaxeSmeltingBlocks().contains(blockType.name()) && handItem.getType().name().endsWith("PICKAXE")) {
+            if (data.getSupportedPickaxeSmeltingBlocks().contains(blockType.name()) && handItem.getType().name().endsWith("PICKAXE") ||
+                    data.getSupportedShovelSmeltingBlocks().contains(blockType.name()) && handItem.getType().name().endsWith("SHOVEL") ||
+                    data.getSupportedAxeSmeltingBlocks().contains(blockType.name()) && handItem.getType().name().endsWith("AXE")) {
+                if (handItemMeta instanceof Damageable damageable) {
+                    if (damageable.getDamage() >= handItem.getType().getMaxDurability() - 1) return;
+                }
                 e.setCancelled(true);
-                pu.breakBlock(player, block, itemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.hasEnchant(Enchantment.SILK_TOUCH), itemMeta.hasEnchant(customEnchant.SMELTING));
-            } else if (data.getSupportedShovelSmeltingBlocks().contains(blockType.name()) && handItem.getType().name().endsWith("SHOVEL")) {
-                e.setCancelled(true);
-                pu.breakBlock(player, block, itemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.hasEnchant(Enchantment.SILK_TOUCH), itemMeta.hasEnchant(customEnchant.SMELTING));
-            } else if (data.getSupportedAxeSmeltingBlocks().contains(blockType.name()) && handItem.getType().name().endsWith("AXE")) {
-                e.setCancelled(true);
-                pu.breakBlock(player, block, itemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.hasEnchant(Enchantment.SILK_TOUCH), itemMeta.hasEnchant(customEnchant.SMELTING));
+                pu.applyDamage(player, handItemMeta, 1, handItem.getType().getMaxDurability());
+                handItem.setItemMeta(handItemMeta);
+                player.getInventory().setItemInMainHand(handItem);
+                pu.breakBlock(player, block, handItemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS), handItemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS), handItemMeta.hasEnchant(Enchantment.SILK_TOUCH), handItemMeta.hasEnchant(customEnchant.SMELTING));
             }
         }
     }

@@ -1,9 +1,8 @@
 package lee.code.enchants.listeners.enchants;
 
 import lee.code.chunks.ChunkAPI;
-import lee.code.enchants.Data;
+import lee.code.core.util.bukkit.BukkitUtils;
 import lee.code.enchants.GoldmanEnchants;
-import lee.code.enchants.PU;
 import lee.code.enchants.lists.Lang;
 import lee.code.essentials.EssentialsAPI;
 import org.bukkit.Chunk;
@@ -25,10 +24,8 @@ public class AutoSellListener implements Listener {
     @EventHandler (priority = EventPriority.MONITOR)
     public void onAutoSell(PlayerInteractEvent e) {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
-        Data data = plugin.getData();
         EssentialsAPI essentialsAPI = plugin.getEssentialsAPI();
         ChunkAPI chunkAPI = plugin.getChunkAPI();
-        PU pu = plugin.getPU();
 
         Player player = e.getPlayer();
         UUID uuid = player.getUniqueId();
@@ -47,8 +44,7 @@ public class AutoSellListener implements Listener {
                                     BlockState state = block.getState();
                                     if (state instanceof Container container && isSupportedContainer(state)) {
                                         e.setCancelled(true);
-                                        if (data.hasPlayerClickDelay(uuid)) return;
-                                        else pu.addPlayerClickDelay(uuid);
+                                        if (BukkitUtils.hasClickDelay(player)) return;
 
                                         long totalSellAmount = 0;
                                         int amountSold = 0;
@@ -64,7 +60,7 @@ public class AutoSellListener implements Listener {
                                         }
                                         if (totalSellAmount != 0) {
                                             essentialsAPI.deposit(uuid, totalSellAmount);
-                                            player.sendMessage(Lang.AUTO_SELL_SUCCESSFUL.getComponent(new String[] { pu.formatAmount(amountSold), pu.formatAmount(totalSellAmount) }));
+                                            player.sendMessage(Lang.AUTO_SELL_SUCCESSFUL.getComponent(new String[] { BukkitUtils.parseValue(amountSold), BukkitUtils.parseValue(totalSellAmount) }));
                                             block.getWorld().playSound(block.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
                                         } else player.sendActionBar(Lang.ERROR_AUTO_SELL_NO_VALUE.getComponent(null));
                                     }

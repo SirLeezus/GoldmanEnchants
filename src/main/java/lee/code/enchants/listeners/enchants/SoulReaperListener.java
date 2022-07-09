@@ -1,10 +1,10 @@
 package lee.code.enchants.listeners.enchants;
 
 import lee.code.chunks.ChunkAPI;
+import lee.code.core.util.bukkit.BukkitUtils;
 import lee.code.enchants.CustomEnchant;
 import lee.code.enchants.Data;
 import lee.code.enchants.GoldmanEnchants;
-import lee.code.enchants.PU;
 import lee.code.pets.PetsAPI;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -29,7 +29,6 @@ public class SoulReaperListener implements Listener {
         Data data = plugin.getData();
         PetsAPI petsAPI = plugin.getPetsAPI();
         ChunkAPI chunkAPI = plugin.getChunkAPI();
-        PU pu = plugin.getPU();
         CustomEnchant customEnchant = plugin.getCustomEnchant();
 
         Player player = e.getPlayer();
@@ -42,8 +41,7 @@ public class SoulReaperListener implements Listener {
                 if (entity instanceof Mob && !data.getSoulReaperBlackList().contains(entity.getType()))  {
                     Chunk chunk = entity.getLocation().getChunk();
                     if (chunkAPI.canInteractInChunk(uuid, chunk)) {
-                        if (data.hasPlayerClickDelay(uuid)) return;
-                        else pu.addPlayerClickDelay(uuid);
+                        if (BukkitUtils.hasClickDelay(player)) return;
 
                         World world = player.getWorld();
                         Location location = entity.getLocation();
@@ -52,14 +50,14 @@ public class SoulReaperListener implements Listener {
                         if (!petsAPI.isPet(entity.getUniqueId())) {
                             e.setCancelled(true);
                             if (!hasEntityKey(handItem)) {
-                                String key = pu.getNBTCompoundData(entity);
+                                String key = BukkitUtils.serializeEntity(entity);
                                 setEntityKey(handItem, key, type.name());
                                 entity.remove();
                                 world.playEffect(location, Effect.ENDER_SIGNAL, 1);
                                 world.playSound(location, Sound.ENTITY_ENDERMAN_TELEPORT, (float) 1, (float) 1);
                             } else {
                                 String key = getEntityKey(handItem);
-                                pu.spawnEntity(key, getEntityType(handItem), location);
+                                BukkitUtils.spawnEntity(key, getEntityType(handItem), location);
                                 removeEntityKey(handItem);
                                 world.playEffect(location, Effect.ENDER_SIGNAL, 1);
                                 world.playSound(location, Sound.ENTITY_ENDERMAN_TELEPORT, (float) 1, (float) 1);
@@ -74,9 +72,7 @@ public class SoulReaperListener implements Listener {
     @EventHandler
     public void onSoulReaperRelease(PlayerInteractEvent e) {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
-        Data data = plugin.getData();
         ChunkAPI chunkAPI = plugin.getChunkAPI();
-        PU pu = plugin.getPU();
         CustomEnchant customEnchant = plugin.getCustomEnchant();
 
         Player player = e.getPlayer();
@@ -93,13 +89,12 @@ public class SoulReaperListener implements Listener {
                         Chunk chunk = location.getChunk();
                         if (chunkAPI.canInteractInChunk(uuid, chunk)) {
                             if (hasEntityKey(handItem)) {
-                                if (data.hasPlayerClickDelay(uuid)) return;
-                                else pu.addPlayerClickDelay(uuid);
+                                if (BukkitUtils.hasClickDelay(player)) return;
                                 e.setCancelled(true);
                                 String key = getEntityKey(handItem);
                                 Vector box = block.getBoundingBox().getCenter();
                                 Location newLoc = box.equals(new Vector(0, 0, 0)) ? block.getLocation() : new Location(world, box.getX(), box.getY() + 0.5, box.getZ());
-                                pu.spawnEntity(key, getEntityType(handItem), newLoc);
+                                BukkitUtils.spawnEntity(key, getEntityType(handItem), newLoc);
                                 removeEntityKey(handItem);
                                 world.playEffect(newLoc, Effect.ENDER_SIGNAL, 1);
                                 world.playSound(newLoc, Sound.ENTITY_ENDERMAN_TELEPORT, (float) 1, (float) 1);

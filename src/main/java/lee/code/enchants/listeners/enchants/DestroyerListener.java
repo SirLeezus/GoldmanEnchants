@@ -1,6 +1,7 @@
 package lee.code.enchants.listeners.enchants;
 
 import lee.code.chunks.ChunkAPI;
+import lee.code.core.util.bukkit.BukkitUtils;
 import lee.code.enchants.Data;
 import lee.code.enchants.GoldmanEnchants;
 import lee.code.enchants.PU;
@@ -32,19 +33,19 @@ public class DestroyerListener implements Listener {
 
         Player player = e.getPlayer();
         ItemStack handItem = player.getInventory().getItemInMainHand();
-        ItemMeta itemMeta = handItem.getItemMeta();
-        if (itemMeta != null && itemMeta.hasEnchant(plugin.getCustomEnchant().DESTROYER)) {
+        ItemMeta handItemMeta = handItem.getItemMeta();
+        if (handItemMeta != null && handItemMeta.hasEnchant(plugin.getCustomEnchant().DESTROYER)) {
             Block block = e.getBlock();
             if (data.getSupportedShovelDestroyerBlocks().contains(block.getType().name()) && handItem.getType().name().endsWith("SHOVEL") || data.getSupportedPickaxeDestroyerBlocks().contains(block.getType().name()) && handItem.getType().name().endsWith("PICKAXE")) {
+                if (handItemMeta instanceof Damageable damageable) {
+                    if (damageable.getDamage() >= handItem.getType().getMaxDurability() - 1) return;
+                }
                 e.setCancelled(true);
                 List<Block> blocks = getBlocks(player.getUniqueId(), block.getRelative(getDirection(player)), handItem.getType());
-                if (itemMeta instanceof Damageable damageable) {
-                    int newDam = damageable.getDamage() + blocks.size();
-                    damageable.setDamage(newDam);
-                    handItem.setItemMeta(itemMeta);
-                    player.getInventory().setItemInMainHand(handItem);
-                }
-                for (Block sBlock : blocks) pu.breakBlock(player, sBlock, itemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS), itemMeta.hasEnchant(Enchantment.SILK_TOUCH), itemMeta.hasEnchant(plugin.getCustomEnchant().SMELTING));
+                pu.applyDamage(player, handItemMeta, blocks.size(), handItem.getType().getMaxDurability());
+                handItem.setItemMeta(handItemMeta);
+                player.getInventory().setItemInMainHand(handItem);
+                for (Block sBlock : blocks) pu.breakBlock(player, sBlock, handItemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS), handItemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS), handItemMeta.hasEnchant(Enchantment.SILK_TOUCH), handItemMeta.hasEnchant(plugin.getCustomEnchant().SMELTING));
             }
         }
     }
