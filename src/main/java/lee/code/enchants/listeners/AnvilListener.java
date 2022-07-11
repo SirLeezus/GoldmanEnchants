@@ -74,6 +74,8 @@ public class AnvilListener implements Listener {
                 if (!result.equals(firstSlot)) {
                     e.setResult(result);
                     if (e.getInventory().getRepairCost() < 1) Bukkit.getServer().getScheduler().runTaskLater(plugin, () -> e.getInventory().setRepairCost(3), 1L);
+                } else if (EnchantmentTarget.BREAKABLE.includes(result)) {
+                    e.setResult(null);
                 }
             }
         }

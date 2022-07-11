@@ -47,7 +47,7 @@ public class LoggerListener implements Listener {
             blockList.add(block);
             LinkedList<Block> blocks = getTree(uuid, block, blockList);
             block.getWorld().playSound(block.getLocation(), Sound.BLOCK_WOOD_BREAK, 1, 1);
-            pu.applyDamage(player, handItemMeta, blocks.size(), handItem.getType().getMaxDurability());
+            pu.applyDamage(player, handItemMeta, 1, handItem.getType().getMaxDurability());
             handItem.setItemMeta(handItemMeta);
             player.getInventory().setItemInMainHand(handItem);
             for (Block logs : blocks) {

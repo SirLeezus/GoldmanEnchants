@@ -42,7 +42,7 @@ public class DestroyerListener implements Listener {
                 }
                 e.setCancelled(true);
                 List<Block> blocks = getBlocks(player.getUniqueId(), block.getRelative(getDirection(player)), handItem.getType());
-                pu.applyDamage(player, handItemMeta, blocks.size(), handItem.getType().getMaxDurability());
+                pu.applyDamage(player, handItemMeta, 1, handItem.getType().getMaxDurability());
                 handItem.setItemMeta(handItemMeta);
                 player.getInventory().setItemInMainHand(handItem);
                 for (Block sBlock : blocks) pu.breakBlock(player, sBlock, handItemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS), handItemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS), handItemMeta.hasEnchant(Enchantment.SILK_TOUCH), handItemMeta.hasEnchant(plugin.getCustomEnchant().SMELTING));

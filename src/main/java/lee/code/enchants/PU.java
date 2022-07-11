@@ -166,13 +166,13 @@ public class PU {
 
     public void applyDamage(Player player, ItemMeta itemMeta, int amount, int max) {
         if (itemMeta.hasEnchant(Enchantment.DURABILITY)) {
-            if (random.nextInt(100) <= (100 / (itemMeta.getEnchantLevel(Enchantment.DURABILITY) + 1))) return;
+            if (random.nextInt(itemMeta.getEnchantLevel(Enchantment.DURABILITY) + 1) > 0) return;
         }
         if (itemMeta instanceof Damageable damageable) {
             int dam = Math.min(damageable.getDamage() + amount, max - 1);
             damageable.setDamage(dam);
             int currentD = max - dam;
-            if (currentD < 30) player.sendActionBar(Lang.DURABILITY.getComponent(new String[] { String.valueOf(currentD), String.valueOf(max) }));
+            if (currentD < 10) player.sendActionBar(Lang.DURABILITY.getComponent(new String[] { String.valueOf(currentD), String.valueOf(max) }));
         }
     }
 }
