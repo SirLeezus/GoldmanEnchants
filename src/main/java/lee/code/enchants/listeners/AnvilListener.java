@@ -44,7 +44,7 @@ public class AnvilListener implements Listener {
 
                     int level2 = slotTwoEnchantMap.getValue();
 
-                    if (enchant2.canEnchantItem(firstSlot) || firstSlot.getType().equals(Material.ENCHANTED_BOOK)) {
+                    if (!firstSlot.getType().equals(Material.BOOK) && enchant2.canEnchantItem(firstSlot) || firstSlot.getType().equals(Material.ENCHANTED_BOOK)) {
                         if (firstItemMeta instanceof EnchantmentStorageMeta bookSlot1) {
                             if (bookSlot1.hasStoredEnchant(enchant2)) {
                                 int level1 = bookSlot1.getStoredEnchantLevel(enchant2);
