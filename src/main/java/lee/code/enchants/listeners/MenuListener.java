@@ -37,7 +37,6 @@ public class MenuListener implements Listener {
             if (slot2 != null) BukkitUtils.givePlayerItem(player, slot2, slot2.getAmount());
             Bukkit.getScheduler().cancelTask(data.getForgeTask(player.getUniqueId()));
             data.removeForgeTask(player.getUniqueId());
-            System.out.println("Task canceled!");
         }
     }
 
