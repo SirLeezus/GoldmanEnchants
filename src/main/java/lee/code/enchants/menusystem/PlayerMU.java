@@ -13,7 +13,6 @@ import java.util.UUID;
 public class PlayerMU {
 
     private final UUID owner;
-    @Getter @Setter private Location anvil;
     @Getter @Setter private int expCost;
     @Getter @Setter private int usedRepairItemAmount;
     public Player getOwner() {

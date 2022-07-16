@@ -23,7 +23,7 @@ public class AnvilListener implements Listener {
                     e.setCancelled(true);
                     Player player = e.getPlayer();
                     if (BukkitUtils.hasClickDelay(player)) return;
-                    new AnvilMenu(GoldmanEnchants.getPlugin().getData().getPlayerMU(player.getUniqueId()), block.getLocation()).open();
+                    new AnvilMenu(GoldmanEnchants.getPlugin().getData().getPlayerMU(player.getUniqueId())).open();
                 }
             }
         }

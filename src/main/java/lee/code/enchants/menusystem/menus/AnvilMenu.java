@@ -9,7 +9,6 @@ import lee.code.enchants.lists.Lang;
 import lee.code.enchants.menusystem.Menu;
 import lee.code.enchants.menusystem.PlayerMU;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
@@ -26,9 +25,8 @@ import java.util.Map;
 
 public class AnvilMenu extends Menu {
 
-    public AnvilMenu(PlayerMU pmu, Location anvil) {
+    public AnvilMenu(PlayerMU pmu) {
         super(pmu);
-        pmu.setAnvil(anvil);
     }
 
     @Override
@@ -184,7 +182,6 @@ public class AnvilMenu extends Menu {
 
     private void scheduleForgeChecker() {
         GoldmanEnchants plugin = GoldmanEnchants.getPlugin();
-        System.out.println("Task scheduled!");
         plugin.getData().addForgeTask(pmu.getOwner().getUniqueId(), new BukkitRunnable() {
             @Override
             public void run() {
