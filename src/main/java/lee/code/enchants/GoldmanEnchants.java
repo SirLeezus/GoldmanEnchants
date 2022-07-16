@@ -3,13 +3,11 @@ package lee.code.enchants;
 import lee.code.chunks.ChunkAPI;
 import lee.code.enchants.commands.CustomEnchantCMD;
 import lee.code.enchants.commands.CustomEnchantTab;
-import lee.code.enchants.listeners.AnvilListener;
-import lee.code.enchants.listeners.DisenchantListener;
-import lee.code.enchants.listeners.EnchantListener;
-import lee.code.enchants.listeners.GrindstoneListener;
+import lee.code.enchants.listeners.*;
 import lee.code.enchants.listeners.enchants.*;
 import lee.code.essentials.EssentialsAPI;
 import lee.code.pets.PetsAPI;
+import lee.code.skins.SkinsAPI;
 import lombok.Getter;
 import net.coreprotect.CoreProtectAPI;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -23,6 +21,7 @@ public class GoldmanEnchants extends JavaPlugin {
     @Getter private EssentialsAPI essentialsAPI;
     @Getter private PetsAPI petsAPI;
     @Getter private CoreProtectAPI coreProtectAPI;
+    @Getter private SkinsAPI skinsAPI;
     @Getter private CustomEnchant customEnchant;
 
     @Override
@@ -35,6 +34,7 @@ public class GoldmanEnchants extends JavaPlugin {
         this.essentialsAPI = new EssentialsAPI();
         this.coreProtectAPI = new CoreProtectAPI();
         this.petsAPI = new PetsAPI();
+        this.skinsAPI = new SkinsAPI();
 
         registerListeners();
         customEnchant.register();
@@ -67,6 +67,7 @@ public class GoldmanEnchants extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new SmeltingListener(), this);
         getServer().getPluginManager().registerEvents(new DisenchantListener(), this);
         getServer().getPluginManager().registerEvents(new HeadHunterListener(), this);
+        getServer().getPluginManager().registerEvents(new MenuListener(), this);
     }
 
     public static GoldmanEnchants getPlugin() {

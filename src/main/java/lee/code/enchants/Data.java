@@ -1,6 +1,7 @@
 package lee.code.enchants;
 
 import lee.code.enchants.lists.*;
+import lee.code.enchants.menusystem.PlayerMU;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -13,7 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Data {
 
-    @Getter private final List<UUID> playerClickDelay = new ArrayList<>();
     @Getter private final List<String> customEnchantKeys = new ArrayList<>();
     @Getter private final List<Material> supportedLoggerBlocks = new ArrayList<>();
     @Getter private final List<String> supportedPickaxeDestroyerBlocks = new ArrayList<>();
@@ -22,10 +22,25 @@ public class Data {
     @Getter private final List<String> supportedShovelSmeltingBlocks = new ArrayList<>();
     @Getter private final List<String> supportedAxeSmeltingBlocks = new ArrayList<>();
     @Getter private final List<EntityType> soulReaperBlackList = new ArrayList<>();
-
+    @Getter private final List<Material> anvilRepairItems = new ArrayList<>();
 
     private final ConcurrentHashMap<UUID, Integer> lightningStrikeTask = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<UUID, Long> lightningStrikeTimer = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<UUID, PlayerMU> playerMUList = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<UUID, Integer> anvilForgeTask = new ConcurrentHashMap<>();
+
+    public boolean hasForgeTask(UUID player) {
+        return anvilForgeTask.containsKey(player);
+    }
+    public void addForgeTask(UUID player, int id) {
+        anvilForgeTask.put(player, id);
+    }
+    public void removeForgeTask(UUID player) {
+        anvilForgeTask.remove(player);
+    }
+    public int getForgeTask(UUID uuid) {
+        return anvilForgeTask.get(uuid);
+    }
 
     public boolean hasLightningStrikeTask(UUID player) {
         return lightningStrikeTask.containsKey(player);
@@ -46,14 +61,14 @@ public class Data {
     public void removeLightningStrikeTimer(UUID player) { lightningStrikeTimer.remove(player); }
     public long getLightningStrikeTimer(UUID player) { return lightningStrikeTimer.getOrDefault(player, 0L); }
 
-    public boolean hasPlayerClickDelay(UUID uuid) {
-        return playerClickDelay.contains(uuid);
-    }
-    public void addPlayerClickDelay(UUID uuid) {
-        playerClickDelay.add(uuid);
-    }
-    public void removePlayerClickDelay(UUID uuid) {
-        playerClickDelay.remove(uuid);
+    public PlayerMU getPlayerMU(UUID uuid) {
+        if (playerMUList.containsKey(uuid)) {
+            return playerMUList.get(uuid);
+        } else {
+            PlayerMU pmu = new PlayerMU(uuid);
+            playerMUList.put(uuid, pmu);
+            return pmu;
+        }
     }
 
     public void loadData() {
@@ -80,5 +95,8 @@ public class Data {
 
         //soul reaper black list
         soulReaperBlackList.addAll(EnumSet.allOf(SoulReaperBlackList.class).stream().map(SoulReaperBlackList::getType).toList());
+
+        //anvil repair items
+        anvilRepairItems.addAll(EnumSet.allOf(AnvilRepairItem.class).stream().map(AnvilRepairItem::getMaterial).toList());
     }
 }

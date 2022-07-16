@@ -3,7 +3,7 @@ main: lee.code.enchants.GoldmanEnchants
 version: ${project.version}
 api-version: 1.19
 author: Lee
-depend: [GoldmanChunks, GoldmanPets, GoldmanEssentials, CoreProtect, GoldmanCore]
+depend: [GoldmanChunks, GoldmanPets, GoldmanEssentials, CoreProtect, GoldmanSkins, GoldmanCore]
 commands:
   customenchant:
     description: Add a custom enchant to your hand item.

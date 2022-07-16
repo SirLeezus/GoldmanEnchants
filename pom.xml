@@ -89,6 +89,11 @@
     </build>
 
     <repositories>
+        <!-- ProtocolLib API -->
+        <repository>
+            <id>dmulloy2-repo</id>
+            <url>https://repo.dmulloy2.net/nexus/repository/public/</url>
+        </repository>
         <!-- Paper API -->
         <repository>
             <id>papermc</id>
@@ -107,6 +112,13 @@
     </repositories>
 
     <dependencies>
+        <!-- ProtocolLib API -->
+        <dependency>
+            <groupId>com.comphenix.protocol</groupId>
+            <artifactId>ProtocolLib</artifactId>
+            <version>4.8.0</version>
+            <scope>provided</scope>
+        </dependency>
         <!-- Paper API -->
         <dependency>
             <groupId>io.papermc.paper</groupId>
@@ -154,6 +166,13 @@
         <dependency>
             <groupId>lee.code.essentials</groupId>
             <artifactId>essentials-api</artifactId>
+            <version>1.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- GoldmanSkins API -->
+        <dependency>
+            <groupId>lee.code.skins</groupId>
+            <artifactId>skins-api</artifactId>
             <version>1.0.0</version>
             <scope>provided</scope>
         </dependency>
