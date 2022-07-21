@@ -91,7 +91,8 @@ public class PU {
 
         if (itemMeta instanceof EnchantmentStorageMeta bookMeta) bookMeta.removeStoredEnchant(enchantment);
         else itemMeta.removeEnchant(enchantment);
-        itemMeta.lore(lore);
+        if (!lore.isEmpty()) itemMeta.lore(lore);
+        else itemMeta.lore(null);
 
         return itemMeta;
     }

@@ -67,7 +67,6 @@ public class GoldmanEnchants extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new SmeltingListener(), this);
         getServer().getPluginManager().registerEvents(new DisenchantListener(), this);
         getServer().getPluginManager().registerEvents(new HeadHunterListener(), this);
-        getServer().getPluginManager().registerEvents(new MenuListener(), this);
     }
 
     public static GoldmanEnchants getPlugin() {

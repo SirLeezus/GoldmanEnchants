@@ -1,7 +1,6 @@
 package lee.code.enchants;
 
 import lee.code.enchants.lists.*;
-import lee.code.enchants.menusystem.PlayerMU;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -26,21 +25,6 @@ public class Data {
 
     private final ConcurrentHashMap<UUID, Integer> lightningStrikeTask = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<UUID, Long> lightningStrikeTimer = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<UUID, PlayerMU> playerMUList = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<UUID, Integer> anvilForgeTask = new ConcurrentHashMap<>();
-
-    public boolean hasForgeTask(UUID player) {
-        return anvilForgeTask.containsKey(player);
-    }
-    public void addForgeTask(UUID player, int id) {
-        anvilForgeTask.put(player, id);
-    }
-    public void removeForgeTask(UUID player) {
-        anvilForgeTask.remove(player);
-    }
-    public int getForgeTask(UUID uuid) {
-        return anvilForgeTask.get(uuid);
-    }
 
     public boolean hasLightningStrikeTask(UUID player) {
         return lightningStrikeTask.containsKey(player);
@@ -60,16 +44,6 @@ public class Data {
     }
     public void removeLightningStrikeTimer(UUID player) { lightningStrikeTimer.remove(player); }
     public long getLightningStrikeTimer(UUID player) { return lightningStrikeTimer.getOrDefault(player, 0L); }
-
-    public PlayerMU getPlayerMU(UUID uuid) {
-        if (playerMUList.containsKey(uuid)) {
-            return playerMUList.get(uuid);
-        } else {
-            PlayerMU pmu = new PlayerMU(uuid);
-            playerMUList.put(uuid, pmu);
-            return pmu;
-        }
-    }
 
     public void loadData() {
         //custom enchant keys
