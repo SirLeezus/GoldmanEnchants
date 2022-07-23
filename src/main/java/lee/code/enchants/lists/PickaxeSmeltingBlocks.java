@@ -18,6 +18,7 @@ public enum PickaxeSmeltingBlocks {
     GOLD_ORE(Material.GOLD_ORE, Material.GOLD_INGOT),
     DEEPSLATE_GOLD_ORE(Material.DEEPSLATE_GOLD_ORE, Material.GOLD_INGOT),
     ANCIENT_DEBRIS(Material.ANCIENT_DEBRIS, Material.NETHERITE_SCRAP),
+    NETHERRACK(Material.NETHERRACK, Material.NETHER_BRICK),
 
     ;
 
