@@ -1,7 +1,6 @@
 package lee.code.enchants.listeners.enchants;
 
 import lee.code.chunks.ChunkAPI;
-import lee.code.core.util.bukkit.BukkitUtils;
 import lee.code.enchants.CustomEnchant;
 import lee.code.enchants.Data;
 import lee.code.enchants.GoldmanEnchants;
@@ -30,6 +29,7 @@ public class LoggerListener implements Listener {
         PU pu = plugin.getPU();
         Data data = plugin.getData();
         CustomEnchant customEnchant = plugin.getCustomEnchant();
+        ChunkAPI chunkAPI = plugin.getChunkAPI();
 
         Player player = e.getPlayer();
         UUID uuid = player.getUniqueId();
@@ -42,19 +42,21 @@ public class LoggerListener implements Listener {
             else if (handItemMeta instanceof Damageable damageable) {
                 if (damageable.getDamage() >= handItem.getType().getMaxDurability() - 1) return;
             }
-            e.setCancelled(true);
-            LinkedList<Block> blockList = new LinkedList<>();
-            blockList.add(block);
-            LinkedList<Block> blocks = getTree(uuid, block, blockList);
-            block.getWorld().playSound(block.getLocation(), Sound.BLOCK_WOOD_BREAK, 1, 1);
-            pu.applyDamage(player, handItemMeta, 1, handItem.getType().getMaxDurability());
-            handItem.setItemMeta(handItemMeta);
-            player.getInventory().setItemInMainHand(handItem);
-            for (Block logs : blocks) {
-                Vector box = logs.getBoundingBox().getCenter();
-                Location location = new Location(logs.getWorld(), box.getX(), box.getY(), box.getZ());
-                logs.getWorld().spawnFallingBlock(location, logs.getBlockData()).setDropItem(false);
-                pu.breakBlock(player, logs, false, 0, false, handItemMeta.hasEnchant(plugin.getCustomEnchant().SMELTING));
+            if (chunkAPI.canBreakInChunk(uuid, block.getChunk())) {
+                e.setCancelled(true);
+                LinkedList<Block> blockList = new LinkedList<>();
+                blockList.add(block);
+                LinkedList<Block> blocks = getTree(uuid, block, blockList);
+                block.getWorld().playSound(block.getLocation(), Sound.BLOCK_WOOD_BREAK, 1, 1);
+                pu.applyDamage(player, handItemMeta, 1, handItem.getType().getMaxDurability());
+                handItem.setItemMeta(handItemMeta);
+                player.getInventory().setItemInMainHand(handItem);
+                for (Block logs : blocks) {
+                    Vector box = logs.getBoundingBox().getCenter();
+                    Location location = new Location(logs.getWorld(), box.getX(), box.getY(), box.getZ());
+                    logs.getWorld().spawnFallingBlock(location, logs.getBlockData()).setDropItem(false);
+                    pu.breakBlock(player, logs, false, 0, false, handItemMeta.hasEnchant(plugin.getCustomEnchant().SMELTING));
+                }
             }
         }
     }

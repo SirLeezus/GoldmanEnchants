@@ -37,11 +37,13 @@ public class SmeltingListener implements Listener {
                 if (handItemMeta instanceof Damageable damageable) {
                     if (damageable.getDamage() >= handItem.getType().getMaxDurability() - 1) return;
                 }
-                e.setCancelled(true);
-                pu.applyDamage(player, handItemMeta, 1, handItem.getType().getMaxDurability());
-                handItem.setItemMeta(handItemMeta);
-                player.getInventory().setItemInMainHand(handItem);
-                pu.breakBlock(player, block, handItemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS), handItemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS), handItemMeta.hasEnchant(Enchantment.SILK_TOUCH), handItemMeta.hasEnchant(customEnchant.SMELTING));
+                if (plugin.getChunkAPI().canBreakInChunk(player.getUniqueId(), block.getChunk())) {
+                    e.setCancelled(true);
+                    pu.applyDamage(player, handItemMeta, 1, handItem.getType().getMaxDurability());
+                    handItem.setItemMeta(handItemMeta);
+                    player.getInventory().setItemInMainHand(handItem);
+                    pu.breakBlock(player, block, handItemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS), handItemMeta.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS), handItemMeta.hasEnchant(Enchantment.SILK_TOUCH), handItemMeta.hasEnchant(customEnchant.SMELTING));
+                }
             }
         }
     }
