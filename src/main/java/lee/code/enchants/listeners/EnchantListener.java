@@ -22,7 +22,7 @@ public class EnchantListener implements Listener {
         PU pu = plugin.getPU();
         Data data = plugin.getData();
 
-        if (pu.enchantChanceRNG() > 900) {
+        if (pu.enchantChanceRNG() > 950) {
             Player player = e.getEnchanter();
             Location blockLocation = e.getEnchantBlock().getLocation();
             int level = e.getExpLevelCost();
@@ -33,17 +33,26 @@ public class EnchantListener implements Listener {
                 if (level == 30) {
                     int rng = pu.enchantChoiceRNG();
                     String key = data.getCustomEnchantKeys().get(rng);
-                    if (enchants.valueOf(key).canEnchantItem(item)) {
-                        if (item.getType().equals(Material.BOOK)) {
-                            ItemStack newBook = new ItemStack(Material.ENCHANTED_BOOK);
-                            ItemMeta newBookMeta = newBook.getItemMeta();
-                            newBook.setItemMeta(pu.applyCustomEnchant(newBookMeta, enchants.valueOf(key), 1));
-                            item.setType(newBook.getType());
-                            item.setItemMeta(newBookMeta);
-                        } else {
-                            item.setItemMeta(pu.applyCustomEnchant(itemMeta, enchants.valueOf(key), 1));
-                        }
+                    if (item.getType().equals(Material.BOOK)) {
+                        ItemStack newBook = new ItemStack(Material.ENCHANTED_BOOK);
+                        ItemMeta newBookMeta = newBook.getItemMeta();
+                        newBook.setItemMeta(pu.applyCustomEnchant(newBookMeta, enchants.valueOf(key), 1));
+                        item.setType(newBook.getType());
+                        item.setItemMeta(newBookMeta);
                         player.getWorld().playSound(blockLocation, Sound.ENTITY_ILLUSIONER_PREPARE_BLINDNESS, (float) 1, (float) 1);
+                    } else {
+                        if (!enchants.valueOf(key).canEnchantItem(item)) {
+                            for (String eKey : data.getCustomEnchantKeys()) {
+                                if (enchants.valueOf(eKey).canEnchantItem(item)) {
+                                    key = eKey;
+                                    break;
+                                }
+                            }
+                        }
+                        if (enchants.valueOf(key).canEnchantItem(item)) {
+                            item.setItemMeta(pu.applyCustomEnchant(itemMeta, enchants.valueOf(key), 1));
+                            player.getWorld().playSound(blockLocation, Sound.ENTITY_ILLUSIONER_PREPARE_BLINDNESS, (float) 1, (float) 1);
+                        }
                     }
                 }
             }
